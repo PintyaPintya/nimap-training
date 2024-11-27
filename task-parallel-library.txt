@@ -1,0 +1,56 @@
+using System;
+using System.Threading.Tasks;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Starting parallel tasks...");
+        
+        Task task1 = Task.Run(() => DoWork("Task 1", 1000));
+        Task task2 = Task.Run(() => DoWork("Task 2", 2000));
+        Task task3 = Task.Run(() => DoWork("Task 3", 3000));
+        
+        Task.WhenAll(task1,task2,task3).Wait();
+        
+        Console.WriteLine("All tasks completed..");
+    }
+    
+    static void DoWork(string taskName, int delay)
+    {
+        Console.WriteLine($"{taskName} starting...");
+        Task.Delay(delay).Wait();
+        Console.WriteLine($"{taskName} completed after {delay/1000} seconds");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+using System;
+using System.Threading.Tasks;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        string[] items = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+        
+        Console.WriteLine("Starting parallel foreach loop...");
+        
+        Parallel.ForEach(items, item =>
+            {
+                Console.WriteLine($"{item} is being processed by {Task.CurrentId}");
+                Task.Delay(1000).Wait();
+            }
+        );
+        
+        Console.WriteLine("Parallel foreach loop completed.");
+    }
+}

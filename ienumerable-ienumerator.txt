@@ -1,0 +1,70 @@
+// IEnumerable
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        List <int> ls = new List <int> {1990,1993,1995,2001,2003,2005};
+        IEnumerable <int> ienum = (IEnumerable<int>) ls;
+        
+        foreach(var n in ls)
+        {
+	    Console.WriteLine(n);
+            if(n > 2000)
+            {
+                SomeFunction(ls);
+            }
+        }
+    }
+    
+    static void SomeFunction(IEnumerable<int> ls)
+    {
+        foreach(var n in ls)
+        {
+            Console.WriteLine(n);
+        }
+    }
+}
+
+
+
+
+
+// IEnumerator
+
+// Online C# Editor for free
+// Write, Edit and Run your C# code using C# Online Compiler
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        List <int> ls = new List <int> {1990,1993,1995,2001,2003,2005};
+        IEnumerable <int> ienum = (IEnumerable<int>) ls;
+        
+        IEnumerator<int> ient = ls.GetEnumerator();
+        
+        while(ient.MoveNext())
+        {
+            Console.WriteLine(ient.Current.ToString());
+            if(Convert.ToInt16(ient.Current) > 2000)
+            {
+                SomeFunction(ient);
+            }
+        }
+    }
+    
+    static void SomeFunction(IEnumerator<int> ient)
+    {
+        while(ient.MoveNext())
+        {
+            Console.WriteLine(ient.Current.ToString());
+        }
+    }
+}

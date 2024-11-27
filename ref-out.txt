@@ -1,0 +1,42 @@
+// ref
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int outsideVar = 2;
+        
+        SomeFunction(ref outsideVar);
+        
+        Console.WriteLine(outsideVar);
+    }
+    
+    static void SomeFunction(ref int insideVar)
+    {
+        insideVar++;
+    }
+}
+
+
+
+//out
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int outsideVar = 2;
+        
+        SomeFunction(out outsideVar);
+        
+        Console.WriteLine(outsideVar);
+    }
+    
+    static void SomeFunction(out int insideVar)
+    {
+        insideVar = 0;
+        insideVar++;
+    }
+}

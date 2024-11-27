@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic; 
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        List<int> arr = new List<int> {1,2,3,4,5,6,7};
+        
+        var ls = arr.FindAll(n => n < 5);
+        
+        foreach(var n in ls)
+        {
+            Console.WriteLine(n);
+        }
+    }
+}
