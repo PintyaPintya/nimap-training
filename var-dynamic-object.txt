@@ -1,0 +1,24 @@
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        dynamic i = 1;
+        i = "Hello from dynamic";
+        Console.WriteLine(i);
+        
+        var j = 1;
+        //j = "Hello from var";
+        Console.WriteLine(j);
+        
+        dynamic k = 2;
+        int num = k;
+        Console.WriteLine(num);
+        
+        object l = 3;
+        int num2 = (int)l;
+        Console.WriteLine(num2);
+        
+    }
+}

@@ -1,0 +1,58 @@
+//Without async-await
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Method();
+        Console.WriteLine("Main thread");
+        Console.ReadLine();
+    }
+    
+    public static void Method()
+    {
+        Task.Run(() => LongTask());
+        Console.WriteLine("Method exited");
+    }
+    
+    public static void LongTask()
+    {
+        Thread.Sleep(2000);
+        Console.WriteLine("Long Task Complete");
+    }
+}
+
+
+
+
+// With async-await
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Method();
+        Console.WriteLine("Main thread");
+        Console.ReadLine();
+    }
+    
+    public static async void Method()
+    {
+        await Task.Run(() => LongTask());
+        Console.WriteLine("Method exited");
+    }
+    
+    public static void LongTask()
+    {
+        Thread.Sleep(2000);
+        Console.WriteLine("Long Task Complete");
+    }
+}
