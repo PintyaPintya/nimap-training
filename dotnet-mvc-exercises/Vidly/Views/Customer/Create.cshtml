@@ -1,0 +1,25 @@
+﻿@model Vidly.Models.Customer
+
+@{
+	ViewData["Title"] = "Add Customer";
+}
+
+<h2>Add Customer</h2>
+
+@using (Html.BeginForm("Create", "Customer"))
+{
+	<div class="form-group">
+		@Html.LabelFor(m => m.Name)
+		@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+		@Html.LabelFor(m => m.BirthDate)
+		@Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control", type = "date" })
+		@Html.LabelFor(m => m.MembershipType)
+		@Html.DropDownListFor(m => m.MembershipTypeId, new SelectList(ViewBag.MembershipTypes, "Id", "Name"), "-- Select Membership Type --", new { @class = "form-control" })
+		<div class="checkbox">
+			@Html.CheckBoxFor(m => m.IsSubscribed) Subscribed to newsletter?
+		</div>
+		@Html.HiddenFor(m => m.Id)
+		@Html.HiddenFor(m => m.MembershipTypeId)
+		<button type="submit" class="btn btn-primary">Save</button>
+	</div>
+}

@@ -18,6 +18,25 @@ namespace Vidly.Controllers
             return View(customers);
         }
 
+        public ActionResult Create()
+        {
+            var membershipTypes = _context.MembershipTypes.ToList();
+            ViewBag.MembershipTypes = membershipTypes;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(Customer customer)
+        {
+            if (customer == null)
+            {
+                return View();
+            }
+            _context.Customers.Add(customer);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public ActionResult Details(int id)
         {
             var customers = _context.Customers.Include(c => c.MembershipType).ToList();
