@@ -1,29 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Vidly.Data;
 using Vidly.Models;
 
 namespace Vidly.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly List<Customer> _customers;
-        public CustomerController()
+        private readonly ApplicationDbContext _context;
+        public CustomerController(ApplicationDbContext context)
         {
-            _customers = new List<Customer>()
-            {
-                new Customer{Id = 1, Name = "John Smith"},
-                new Customer{Id = 2, Name = "Mary Williams"}
-            };
+            _context = context;
         }
-        public IActionResult Index()
+        public ActionResult Index()
         {            
-            return View(_customers);
+            var customers = _context.Customers.ToList();
+            return View(customers);
         }
 
-        public IActionResult Details(int id)
+        public ActionResult Details(int id)
         {
-            if (id > _customers.Count || id < 1) return NotFound();
+            var customers = _context.Customers.ToList();
+            if (id > customers.Count || id < 1) return NotFound();
 
-            var customer = _customers[id - 1];
+            var customer = customers[id - 1];
             return View(customer);
         }
     }
