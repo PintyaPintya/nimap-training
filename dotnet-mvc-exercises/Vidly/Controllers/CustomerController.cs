@@ -32,9 +32,29 @@ namespace Vidly.Controllers
             {
                 return View();
             }
-            _context.Customers.Add(customer);
-            _context.SaveChanges();
+
+            if (customer.Id == 0)
+            {
+                _context.Customers.Add(customer);
+                _context.SaveChanges();
+            }
+            else
+            {
+                _context.Customers.Update(customer);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
+            if(customer == null) return NotFound();
+            var membershipTypes = _context.MembershipTypes.ToList();
+            ViewBag.MembershipTypes = membershipTypes;
+
+            return View("Create", customer);
         }
 
         public ActionResult Details(int id)
