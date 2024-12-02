@@ -1,10 +1,10 @@
 ﻿@model Vidly.Models.Customer
 
 @{
-	ViewData["Title"] = "Add Customer";
+	ViewData["Title"] = (Model == null ? "Add" : "Edit") + " Customer";
 }
 
-<h2>Add Customer</h2>
+<h2>@(Model == null ? "Add" : "Edit") Customer</h2>
 
 @using (Html.BeginForm("Create", "Customer"))
 {
@@ -13,7 +13,12 @@
 		@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
 
 		@Html.LabelFor(m => m.BirthDate)
-		<input type="date" class="form-control" value="@Model.BirthDate?.ToString("yyyy-MM-dd")" name="BirthDate" />
+		@if(Model == null)
+		{
+			@Html.TextBoxFor(m => m.BirthDate, new { type = "date", @class = "form-control" })
+		}else{
+			<input type="date" class="form-control" value="@Model.BirthDate?.ToString("yyyy-MM-dd")" name="BirthDate" />
+		}
 
 		@Html.LabelFor(m => m.MembershipType)
 		@Html.DropDownListFor(m => m.MembershipTypeId, new SelectList(ViewBag.MembershipTypes, "Id", "Name"), "-- Select Membership Type --", new { @class = "form-control" })
