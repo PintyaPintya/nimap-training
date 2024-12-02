@@ -20,11 +20,12 @@ namespace Vidly.Controllers
 
         public ActionResult Details(int id)
         {
-            var customers = _context.Customers.ToList();
+            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
             if (id > customers.Count || id < 1) return NotFound();
 
             var customer = customers[id - 1];
             return View(customer);
         }
+
     }
 }

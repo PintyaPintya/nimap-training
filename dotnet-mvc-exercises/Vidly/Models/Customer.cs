@@ -7,5 +7,6 @@
         public bool IsSubscribed { get; set; }
         public MembershipType MembershipType { get; set; }
         public byte MembershipTypeId { get; set; }
+        public DateOnly? BirthDate { get; set; }
     }
 }
