@@ -12,6 +12,7 @@
 		<thead>
 			<tr>
 				<th>Customer</th>
+				<th>Membership Type</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -20,6 +21,9 @@
 				<tr>
 					<td>
 						<a href="@Url.Action("Details", new {id = customer.Id})" class="link-primary">@customer.Name</a>
+					</td>
+					<td>
+						<p>@customer.MembershipType.Name</p>
 					</td>
 				</tr>
 			}
