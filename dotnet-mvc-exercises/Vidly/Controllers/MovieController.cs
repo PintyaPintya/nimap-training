@@ -20,7 +20,7 @@ namespace Vidly.Controllers
 
         public IActionResult Details(int id)
         {
-            var movies = _context.Movies.ToList();
+            var movies = _context.Movies.Include(m => m.Genre).ToList();
             if (id < 1 || id > movies.Count) return NotFound();
 
             var movie = movies[id - 1];
