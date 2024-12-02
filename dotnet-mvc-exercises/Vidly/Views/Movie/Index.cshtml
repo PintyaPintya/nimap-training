@@ -12,6 +12,7 @@
 		<thead>
 			<tr>
 				<th>Movie</th>
+				<th>Genre</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -20,6 +21,9 @@
 				<tr>
 					<td>
 						<a href="@Url.Action("Details", new {id = movie.Id})" class="link-primary">@movie.Name</a>
+					</td>
+					<td>
+						<p>@movie.Genre.Name</p>
 					</td>
 				</tr>
 			}

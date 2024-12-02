@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
 using Vidly.Models;
 
@@ -13,7 +14,7 @@ namespace Vidly.Controllers
         }
         public IActionResult Index()
         {
-            var movies = _context.Movies.ToList();
+            var movies = _context.Movies.Include(m => m.Genre).ToList();
             return View(movies);
         }
 
