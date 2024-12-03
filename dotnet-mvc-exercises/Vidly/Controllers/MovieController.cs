@@ -28,19 +28,18 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult Create(Movie movie)
         {
-            if(movie == null) return View();
-
-            movie.DateAdded = DateOnly.FromDateTime(DateTime.Now);
-
+            if (movie == null) return View();
+            
             if (movie.Id == 0)
             {
+                movie.DateAdded = DateOnly.FromDateTime(DateTime.Now);
                 _context.Movies.Add(movie);
             }
             else
             {
                 _context.Movies.Update(movie);
             }
-            
+
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

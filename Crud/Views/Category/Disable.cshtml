@@ -1,0 +1,21 @@
+﻿@model Category
+
+@{
+	ViewData["Title"] = (Model.IsActive ? "Disable" : "Enable") + " category";
+}
+
+<h2>Disable category</h2>
+
+@using(Html.BeginForm("Disable", "Category"))
+{
+	<p>Are you sure you want to @(Model.IsActive ? "disable" : "enable") '@Model.Name' ?</p>
+	@Html.HiddenFor(m => m.CategoryId)
+	
+	if(Model.IsActive){
+		<button type="submit" class="btn btn-danger">Yes</button>
+	}else{
+		<button type="submit" class="btn btn-success">Yes</button>
+	}
+	
+	<a href=@Url.Action("Index") class="btn btn-secondary">Back to list</a>
+}

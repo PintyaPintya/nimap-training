@@ -1,0 +1,29 @@
+﻿@model Product
+
+@{
+	ViewData["Title"] = "Edit Product";
+}
+
+<h2>Edit Category</h2>
+
+@using (Html.BeginForm("Edit", "Product"))
+{
+	<div class="form-control">
+		@Html.LabelFor(m => m.Name)
+		@Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+		@Html.ValidationMessageFor(m => m.Name)
+
+		@Html.LabelFor(m => m.Category)
+		@Html.DropDownListFor(m => m.CategoryId,
+				new SelectList(ViewBag.Categories, "CategoryId", "Name"),
+				"-- Select Category --", new { @class = "form-control" })
+
+		<br />
+		@Html.HiddenFor(m => m.CategoryId)
+		@Html.HiddenFor(m => m.ProductId)
+
+		<button type="submit" class="btn btn-primary">Update Product</button>
+	</div>
+
+}
+<a href=@Url.Action("Index") class="btn btn-secondary">Back to list</a>

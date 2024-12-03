@@ -1,0 +1,21 @@
+﻿@model Product
+
+@{
+	ViewData["Title"] = "Delete Product";
+}
+
+<h2>Delete product</h2>
+
+@using (Html.BeginForm("Delete", "Product"))
+{
+	<p>Are you sure you want to delete '@Model.Name' ?</p>
+	@Html.HiddenFor(m => m.CategoryId)
+	@Html.HiddenFor(m => m.ProductId)
+
+
+	<button type="submit" class="btn btn-danger">Yes</button>
+
+
+	
+}
+<a href=@Url.Action("Index") class="btn btn-secondary">Back to list</a>
