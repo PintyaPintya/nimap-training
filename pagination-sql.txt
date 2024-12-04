@@ -1,0 +1,31 @@
+CREATE TABLE EMPLOYEE (
+  empId int,
+  name varchar(15),
+  dept varchar(10)
+);
+
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (1, 'Clark', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (2, 'Dave', 'Accounting');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (3, 'Ava', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (4, 'Clark', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (5, 'Dave', 'Accounting');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (6, 'Ava', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (7, 'Clark', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (8, 'Dave', 'Accounting');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (9, 'Ava', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (10, 'Clark', 'Sales');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (11, 'Dave', 'Accounting');
+INSERT INTO EMPLOYEE(empId,name,dept) VALUES (12, 'Ava', 'Sales');
+
+DECLARE @page AS int = 2;
+DECLARE @pageSize AS int = 10;
+
+DECLARE @skipEntries as int = (@page - 1) * @pageSize;
+
+select * from EMPLOYEE 
+  order by empId
+  offset @skipEntries rows
+  fetch next @pageSize rows only
+GO
+
+

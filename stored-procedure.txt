@@ -1,0 +1,14 @@
+CREATE PROCEDURE GetProductDetailsWithCategoryAndUser()
+BEGIN
+    SELECT 
+        p.product_id,
+        p.product_name,
+        c.category_name,
+        p.created_by
+    FROM 
+        Products p
+    JOIN 
+        Categories c ON p.category_id = c.category_id
+END
+
+-- Exec GetProductDetailsWithCategoryAndUser
