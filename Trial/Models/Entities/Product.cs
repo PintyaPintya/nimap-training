@@ -2,12 +2,12 @@
 
 namespace Trial.Models.Entities
 {
-    public class Category
+    public class Product
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public bool IsActive { get; set; }
+        public int CategoryId { get; set; }
         [JsonIgnore]
-        public List<Product> Products { get; set; } = new List<Product>();
+        public Category? Category { get; set; }
     }
 }
