@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Trial.Data;
 using Trial.IRepository;
+using Trial.Models;
 using Trial.Models.Entities;
 
 namespace Trial.Repository
@@ -22,6 +23,23 @@ namespace Trial.Repository
         public async Task CreateAsync(Category category)
         {
             await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
+            return;
+        }
+        public async Task UpdateAsync(Category category, UpdateCategoryDto updateCategoryDto)
+        {
+            category.Name = updateCategoryDto.Name;
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        public async Task DisableAsync(Category category)
+        {
+            if (category.IsActive)
+                category.IsActive = false;
+            else
+                category.IsActive = true;
+
             await _context.SaveChangesAsync();
             return;
         }

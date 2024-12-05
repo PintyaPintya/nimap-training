@@ -7,6 +7,8 @@ namespace Trial.IRepository
     {
         Task<List<Category>> GetAllCategories();
         Task CreateAsync(Category category);
+        Task UpdateAsync(Category category, UpdateCategoryDto updateCategoryDto);
+        Task DisableAsync(Category category);
         Task<Category?> GetCategoryByNameAsync(string name);
         Task<Category?> GetCategoryByIdAsync(int id);
     }

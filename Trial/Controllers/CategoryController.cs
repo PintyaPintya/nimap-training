@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Trial.IRepository;
 using Trial.Mappers;
 using Trial.Models;
@@ -51,5 +52,35 @@ namespace Trial.Controllers
 
             return CreatedAtAction(nameof(GetAllCategories), new { id = category.Id }, category);
         }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
+        {
+            var ifCategoryExists = await _categoryRepository.GetCategoryByNameAsync(updateCategoryDto.Name);
+            if (ifCategoryExists != null)
+                return Conflict("A category with this name already exists.");
+
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+                return Conflict("A category with this id doesn't exist.");
+
+            await _categoryRepository.UpdateAsync(category, updateCategoryDto);
+            return Ok(category);
+        }
+
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<IActionResult> DisableCategory(int id)
+        {
+            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+
+            if(category == null)
+                return Conflict("A category with this id doesn't exist.");
+
+            await _categoryRepository.DisableAsync(category);
+            return Ok(category);
+        }       
     }
 }
