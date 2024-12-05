@@ -9,7 +9,7 @@ namespace Trial.IRepository
         Task CreateAsync(Category category);
         Task UpdateAsync(Category category, UpdateCategoryDto updateCategoryDto);
         Task DisableAsync(Category category);
-        Task<Category?> GetCategoryByNameAsync(string name);
+        Task<Category?> CheckCategoryByNameAsync(string name);
         Task<Category?> GetCategoryByIdAsync(int id);
     }
 }

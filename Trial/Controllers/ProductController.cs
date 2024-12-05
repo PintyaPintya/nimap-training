@@ -36,6 +36,24 @@ namespace Trial.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetProductById(int id)
+        {
+            try
+            {
+                var product = await _productRepository.GetProductById(id);
+                if (product == null)
+                    return NotFound($"Product with ID {id} not found.");
+
+                return Ok(product);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while fetching the product.");
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddProduct(AddOrUpdateProductDto addOrUpdateProductDto)
         {

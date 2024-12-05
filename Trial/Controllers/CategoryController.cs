@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Trial.IRepository;
 using Trial.Mappers;
 using Trial.Models;
+using Trial.Models.Entities;
 
 namespace Trial.Controllers
 {
@@ -20,11 +21,20 @@ namespace Trial.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategories()
         {
-            var categories = await _categoryRepository.GetAllCategories();
-            
-            if(categories == null) return NotFound();
+            try
+            {
+                var categories = await _categoryRepository.GetAllCategories();
+                if (categories == null || categories.Count == 0)
+                    return NotFound("No active categories found.");
 
-            return Ok(categories);
+                if (categories == null) return NotFound();
+
+                return Ok(categories);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while fetching categories.");
+            }
         }
 
         [HttpGet]
@@ -34,7 +44,7 @@ namespace Trial.Controllers
             var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
             if (category == null)
-                return Conflict("A category with this id doesn't exist.");
+                return NotFound($"Category with ID {id} not found.");
 
             return Ok(category);
         }
@@ -42,45 +52,66 @@ namespace Trial.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCategory(AddCategoryDto addCategoryDto)
         {
-            var ifCategoryExists = await _categoryRepository.GetCategoryByNameAsync(addCategoryDto.Name);
+            try
+            {
+                var ifCategoryExists = await _categoryRepository.CheckCategoryByNameAsync(addCategoryDto.Name);
 
-            if(ifCategoryExists != null) 
-                return Conflict("A category with this name already exists.");
+                if (ifCategoryExists != null)
+                    return BadRequest($"Category with the name '{addCategoryDto.Name}' already exists.");
 
-            var category = addCategoryDto.ToCategory();
-            await _categoryRepository.CreateAsync(category);
+                var category = addCategoryDto.ToCategory();
+                await _categoryRepository.CreateAsync(category);
 
-            return CreatedAtAction(nameof(GetAllCategories), new { id = category.Id }, category);
+                return CreatedAtAction(nameof(GetAllCategories), new { id = category.Id }, category);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while creating category.");
+            }
         }
 
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> UpdateCategory(int id, UpdateCategoryDto updateCategoryDto)
         {
-            var ifCategoryExists = await _categoryRepository.GetCategoryByNameAsync(updateCategoryDto.Name);
-            if (ifCategoryExists != null)
-                return Conflict("A category with this name already exists.");
+            try
+            {
+                var ifCategoryExists = await _categoryRepository.CheckCategoryByNameAsync(updateCategoryDto.Name);
+                if (ifCategoryExists != null)
+                    return BadRequest($"Category with the name '{updateCategoryDto.Name}' already exists.");
 
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+                var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
-            if (category == null)
-                return Conflict("A category with this id doesn't exist.");
+                if (category == null)
+                    return NotFound($"Category with ID {id} not found.");
 
-            await _categoryRepository.UpdateAsync(category, updateCategoryDto);
-            return Ok(category);
+                await _categoryRepository.UpdateAsync(category, updateCategoryDto);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while updating category.");
+            }
         }
 
         [HttpDelete]
         [Route("{id:int}")]
         public async Task<IActionResult> DisableCategory(int id)
         {
-            var category = await _categoryRepository.GetCategoryByIdAsync(id);
+            try
+            {
+                var category = await _categoryRepository.GetCategoryByIdAsync(id);
 
-            if(category == null)
-                return Conflict("A category with this id doesn't exist.");
+                if (category == null)
+                    return NotFound($"Category with ID {id} not found.");
 
-            await _categoryRepository.DisableAsync(category);
-            return Ok(category);
+                await _categoryRepository.DisableAsync(category);
+                return Ok(category);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while deleting the product.");
+            }
         }       
     }
 }

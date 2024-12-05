@@ -17,43 +17,86 @@ namespace Trial.Repository
 
         public async Task<List<Category>> GetAllCategories()
         {
-            return await _context.Categories.ToListAsync();
+            try
+            {
+                return await _context.Categories.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving categories", ex);
+            }
         }
 
         public async Task CreateAsync(Category category)
         {
-            await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
-            return;
+            try
+            {
+                await _context.Categories.AddAsync(category);
+                await _context.SaveChangesAsync();
+                return;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error creating category", ex);
+
+            }
         }
         public async Task UpdateAsync(Category category, UpdateCategoryDto updateCategoryDto)
         {
-            category.Name = updateCategoryDto.Name;
-            await _context.SaveChangesAsync();
-            return;
+            try
+            {
+                category.Name = updateCategoryDto.Name;
+                await _context.SaveChangesAsync();
+                return;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error updating category", ex);
+            }
         }
 
         public async Task DisableAsync(Category category)
         {
-            if (category.IsActive)
-                category.IsActive = false;
-            else
-                category.IsActive = true;
+            try
+            {
+                if (category.IsActive)
+                    category.IsActive = false;
+                else
+                    category.IsActive = true;
 
-            await _context.SaveChangesAsync();
-            return;
+                await _context.SaveChangesAsync();
+                return;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error disabling/enabling product", ex);
+            }
         }
 
-        public async Task<Category?> GetCategoryByNameAsync(string name)
+        public async Task<Category?> CheckCategoryByNameAsync(string name)
         {
-            return await _context.Categories
+            try
+            {
+                return await _context.Categories
                     .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while verifying category name", ex);
+            }
         }
 
         public async Task<Category?> GetCategoryByIdAsync(int id)
         {
-            return await _context.Categories
+            try
+            {
+                return await _context.Categories
                 .FirstOrDefaultAsync(c => c.Id == id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error getting category by id", ex);
+            }
         }
     }
 }
