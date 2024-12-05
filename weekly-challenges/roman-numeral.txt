@@ -1,0 +1,43 @@
+using System;
+class HelloWorld {
+    
+	static void Main() 
+	{
+		Console.WriteLine(RomanToNumeral("MCMIV"));
+	}
+
+    public static int RomanToNumeral(string s)
+    {
+        int result = 0;
+        for(int i = 0; i < s.Length;i++)
+        {
+            if(i != s.Length - 1 && Value(s[i]) < Value(s[i+1]))
+            {
+                result += Value(s[i+1]) - Value(s[i]);
+                i++;
+            }else{
+                result += Value(s[i]);
+            }
+        }
+        return result;
+    }
+	
+	public static int Value(char r)
+	{
+		if (r == 'I')
+			return 1;
+		if (r == 'V')
+			return 5;
+		if (r == 'X')
+			return 10;
+		if (r == 'L')
+			return 50;
+		if (r == 'C')
+			return 100;
+		if (r == 'D')
+			return 500;
+		if (r == 'M')
+			return 1000;
+		return -1;
+	}
+}

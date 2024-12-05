@@ -1,0 +1,55 @@
+using System;
+
+public class Account
+{
+    public double Number { get; set; }
+    public string Name { get; set; }
+    public double Balance { get; set; }
+    
+    public double CalculateInterest(string accountType)
+    {
+        if(accountType == "Saving")
+        {
+            return Balance * 0.3;
+        }
+        else
+        {
+            return Balance * 0.5;
+        }
+    }
+}
+
+
+
+------------------------------------------------------
+
+
+using System;
+
+public class Account
+{
+    public double Number { get; set; }
+    public string Name { get; set; }
+    public double Balance { get; set; }
+}
+
+public interface IAccount
+{
+    double CalculateInterest(Account account);
+}
+
+public class SavingAccount : IAccount
+{
+    public double CalculateInterest(Account account)
+    {
+        return account.Balance * 0.3;
+    }
+}
+
+public class OtherAccount : IAccount
+{
+    public double CalculateInterest(Account account)
+    {
+        return account.Balance * 0.5;
+    }
+}

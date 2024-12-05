@@ -1,0 +1,70 @@
+using System;
+
+public class Employee
+{
+    public virtual int CalculateSalary()
+    {
+        return 10000;
+    }
+    public virtual int CalculateBonus()
+    {
+        return 10000;
+    }
+}
+
+public class PermanentEmployee : Employee
+{
+    public override int CalculateSalary()
+    {
+        return 20000;
+    }
+    public override int CalculateBonus()
+    {
+        return 5000;
+    }
+}
+public class ContractEmployee : Employee
+{
+    public override int CalculateSalary()
+    {
+        return 15000;
+    }
+    public override int CalculateBonus()
+    {
+        throw new NotImplementedException();
+    }
+}
+
+
+--------------------------------------------
+
+using System;
+
+public class Employee
+{
+    public virtual int CalculateSalary()
+    {
+        return 10000;
+    }
+}
+
+public class PermanentEmployee : Employee
+{
+    public override int CalculateSalary()
+    {
+        return 20000;
+    }
+    
+    public int CalculateBonus()
+    {
+        return 5000;
+    }
+}
+
+public class ContractEmployee : Employee
+{
+    public override int CalculateSalary()
+    {
+        return 15000;
+    }
+}

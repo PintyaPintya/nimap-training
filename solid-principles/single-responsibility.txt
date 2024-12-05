@@ -1,0 +1,42 @@
+using System;
+
+public class Employee
+{
+    public int CalculateSalary()
+    {
+        Console.WriteLine("10000");
+    }
+    public string GetDepartment()
+    {
+        Console.WriteLine("IT");
+    }
+    public void Save()
+    {
+        // Save logic
+    }
+}
+
+
+
+-----------------------------------------------
+
+using System;
+
+public class Employee
+{
+    public int CalculateSalary()
+    {
+        Console.WriteLine("10000");
+    }
+    public string GetDepartment()
+    {
+        Console.WriteLine("IT");
+    }
+}
+public class EmployeeRepository
+{
+    public void Save()
+    {
+        // Save logic
+    }
+}
