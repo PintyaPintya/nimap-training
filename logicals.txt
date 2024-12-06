@@ -1,0 +1,697 @@
+// 1. WAP to find Second largest element in an array : arr[] = [12, 35, 1, 10, 34, 1, 35], without sorting, without using any built-in methods and without deleting duplicate elements. What will be the time complexity?
+
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int[] arr = {12, 35, 1, 10, 34, 1, 35};
+        int max = 0, secMax = 0;
+        
+        foreach(int n in arr)
+        {
+            if(n > max)
+            {
+                secMax = max;
+                max = n;
+            }else if(n > secMax && n != max)
+            {
+                secMax = n;
+            }
+        }
+        Console.WriteLine(secMax);
+    }
+}
+
+
+
+
+
+
+//2. WAP to reverse an integer without converting it to a string, without using any built-in methods.
+
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int n = 1234;
+        int rev = 0;
+        
+        while(n > 0)
+        {
+            int t = n % 10;
+            rev = rev * 10 + t;
+            n /= 10;
+        }
+        
+        Console.WriteLine(rev);
+    }
+}
+
+
+
+// 2. Swap Values without using any variable a=10, b=12.
+
+using System;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int a = 10, b = 12;
+        
+        a = a + b;
+        b = a-b;
+        a = a -b;
+        
+        Console.WriteLine(a);
+        Console.WriteLine(b);
+    }
+}
+
+
+
+// 3. Logic for anagram program with its time complexity. (for large strings).
+
+using System;
+using System.Collections.Generic; 
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine(IsAnagram());
+        
+    }
+    
+    public static bool IsAnagram()
+    {
+        string s = "rules", t = "ulress";
+        
+        Dictionary<char,int> mpp = new();
+        
+        foreach(char c in s)
+        {
+            if(mpp.ContainsKey(c))
+            {
+                mpp[c]++;
+            } else
+            {
+                mpp.Add(c,1);
+            }
+        }
+        
+        foreach(char c in t)
+        {
+            if(mpp.ContainsKey(c))
+            {
+                mpp[c]--;
+            } else {
+                return false;
+            }
+        }
+        
+        foreach(KeyValuePair<char,int> ele in mpp)
+        {
+            if(ele.Value != 0)
+            {
+                return false;
+            }
+        }        
+        return true;
+    }
+}
+
+O(n+m)
+n = length of s, m = length of t
+
+
+
+
+// 4. Find the reverse of the string.
+
+using System;
+using System.Text;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        StringBuilder s = new("qwer tyui");
+        int low = 0, high = s.Length - 1;
+        
+        while(low < high)
+        {
+            (s[low],s[high]) = (s[high],s[low]);
+            low++;
+            high--;
+        }
+        Console.WriteLine(s);
+    }
+}
+
+
+
+
+// 5. WAP to find missing elements from the array?
+
+using System;
+using System.Text;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        int[] arr = {1,2,3,5};
+        int n = 5;
+        
+        int sum1 = 0, sum2 = 0;
+        
+        for(int i = 1; i <= n; i++)
+        {
+            sum1 += i;
+        }
+        
+        for(int i = 0; i < n-1; i++)
+        {
+            sum2 += arr[i];
+        }
+        
+        Console.WriteLine(sum1 - sum2);
+    }
+}
+
+
+
+
+//6. WAP to find the given string is Palindrome or not.
+
+using System;
+using System.Text;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    string s = "AABBAA";
+	    Console.WriteLine(IsPali(s));
+    }
+    
+    public static bool IsPali(string s)
+    {
+        int low = 0, high = s.Length - 1;
+	    
+	    while(low < high)
+	    {
+	        if(s[low] != s[high])
+	        {
+	            return false;
+	        }
+	        low++;
+	        high--;
+	    }
+	    return true;
+    }
+}
+
+
+
+// 7. WAP to print Fibonacci series with recursion.
+using System;
+using System.Text;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int n = 10;
+	    Console.Write("0 1 ");
+	    int a = 0, b = 1;
+	    int index = 2;
+	    
+	    Fibo(n,index,a,b);
+    }
+    
+    public static void Fibo(int n, int index, int a, int b)
+    {
+        if(index == n)
+        {
+            return;
+        }
+        
+        int t = a + b;
+        Console.Write(t + " ");
+        a = b;
+        b = t;
+        index++;
+        
+        Fibo(n,index,a,b);
+    }
+}
+
+
+
+
+// 8. WAP to print Fibonacci series without recursion.
+using System;
+using System.Text;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int n = 10;
+	    Console.Write("0 1 ");
+	    int a = 0, b = 1;
+	    for(int i = 2; i < n; i++)
+	    {
+	        int t = a + b;
+	        Console.Write(t + " ");
+	        
+	        a = b;
+	        b = t;
+	    }
+    }
+}
+
+
+
+
+
+//9. WAP to find the second largest number in an array without sorting.
+//Same as 1.
+
+
+
+
+//10. Code to find even numbers in a list
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    List <int> ls = new List <int> {1,2,3,4,5,6};
+	    
+	    foreach(int n in ls)
+	    {
+	        if(n % 2 == 0)
+	        {
+	            Console.Write(n + " ");
+	        }
+	    }
+    }
+}
+
+
+
+
+
+
+
+
+// 11. Find prime numbers from 1 ....n 
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int n = 10;
+	    
+	    for(int i = 2; i <= n; i++)
+	    {
+	        if(IsPrime(i))
+	        {
+	            Console.Write(i + " ");
+	        }
+	    }
+    }
+    
+    public static bool IsPrime(int n)
+    {
+        int t = (int)Math.Sqrt(n);
+        
+        for(int i = 2; i <= t; i++)
+        {
+            if(n % i == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+
+
+
+//12. WAP for getting a square root of a given number.
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int n = 37;
+	    int ans = 0;
+	    
+	    for(int i = 1; i < n; i++)
+	    {
+	        if(i*i <= n)
+	        {
+	            ans = i;
+	        }
+	        else
+	        {
+	            break;
+	        }
+	    }
+	    Console.WriteLine(ans);
+    }
+}
+
+
+
+
+// 13. WAP with 2 different logic, to find all duplicate numbers in an array.
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int[] arr = {3,2,4,2,4,1,5,6,6,8};
+	    
+	    Dictionary <int,int> mpp = new();
+	    
+	    foreach(int n in arr)
+	    {
+	        if(mpp.ContainsKey(n))
+	        {
+	            mpp[n]++;
+	        }else{
+	            mpp.Add(n,1);
+	        }
+	    }
+	    
+	    foreach(KeyValuePair<int,int> ele in mpp)
+	    {
+	        if(ele.Value > 1)
+	        {
+	            Console.Write($"{ele.Key} ");
+	        }
+	    }
+    }
+}
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int[] arr = {3,2,4,2,4,1,5,6,6,8};
+	    
+	    Array.Sort(arr);
+	    
+	    for(int i = 0; i < arr.Length - 1; i++)
+	    {
+	        if(arr[i] == arr[i+1])
+	        {
+	            Console.Write(arr[i] + " ");
+	        }
+	    }
+    }
+}
+
+
+
+
+
+
+//14. [80, 60, 10, 50, 30, 100, 0, 50]
+Find pairs whose sum = 100;
+Logic for above problem?
+What will be the complexity for it?
+Any better solution for the above problem?
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int[] arr = {80, 60, 10, 50, 30, 100, 0, 50};
+	    int k = 100;
+	    
+	    for(int i = 0; i < arr.Length - 1; i++)
+	    {
+	        for(int j = i + 1; j < arr.Length; j++)
+	        {
+	            if(arr[j] + arr[i] == k)
+	            {
+	                Console.WriteLine($"{arr[i]} {arr[j]}");
+	            }
+	        }
+	    }
+    }
+}
+
+Time complexity N^2
+
+Better soln >
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int[] arr = {80, 60, 10, 50, 30, 100, 0, 50};
+	    int k = 100;
+	    
+	    Dictionary <int, int> mpp = new();
+	    
+	    foreach(int n in arr)
+	    {
+	        int t = k - n;
+	        
+	        if(mpp.ContainsKey(t))
+	        {
+	            Console.WriteLine(n + " " + t);
+	        }else{
+	            mpp.Add(n,1);
+	        }
+	    }
+    }
+}
+Time complexity NLogN
+
+
+
+
+
+//15.  4, 5, 6, 7, 8, 9, 11, 12, 13, 6, 7, 8, 9
+These two are linkedList, Find point of common element?
+Logic for above problem?
+What will be the complexity for it?
+Any better solution for the above problem?
+
+
+Problem with question
+
+
+
+
+
+
+
+//16. Given an array of strings, group the anagrams together. You can return the answer in any order.
+Input: str = ["eat","tea","tan","ate","nat","bat"]
+ Output: [["bat"],["nat","tan"],["ate","eat","tea"
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        List <string> arr = new List <string> {"eat","tea","tan","ate","nat","bat"};
+        
+        List <string> ls = new();
+        
+        foreach(var s in arr)
+        {
+            ls.Add(SortAsc(s));
+        }
+        
+        foreach(var s in ls)
+        {
+            Console.WriteLine(s);
+        }
+    }
+    
+    static string SortAsc(string s)
+    {
+        char[] arr = s.ToCharArray();
+        Array.Sort(arr);
+        return string.Join("",arr);
+    }
+}
+
+
+
+
+
+
+
+
+//17. find the frequency of each and every character in a string and sort it in descending order.
+Input: Engineer
+Output : e3n2g1i1r1
+
+
+// Online C# Editor for free
+// Write, Edit and Run your C# code using C# Online Compiler
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+        string s = "Engineer";
+        string res = "";
+        
+        Dictionary <char,int> mpp = new();
+        
+        for(int i = 0; i < s.Length; i++)
+        {
+            char c = Char.ToLower(s[i]);
+            if(mpp.ContainsKey(c))
+            {
+                mpp[c]++;
+            }
+            else
+            {
+                mpp.Add(c,1);
+            }
+        }
+        
+        List<KeyValuePair<char,int>> ls = new(mpp);
+        
+        for(int i = 0; i < ls.Count - 1; i++)
+        {
+            for(int j = 0; j < ls.Count - 1 - i; j++)
+            {
+                if(ls[j].Value > ls[j+1].Value)
+                {
+                    (ls[j],ls[j+1]) = (ls[j+1],ls[j]);
+                }
+            }
+        }
+        
+        for(int i = ls.Count - 1; i >= 0; i--)
+        {
+            res += ls[i].Key;
+            res+= ls[i].Value;
+        }
+        
+        Console.WriteLine(res);
+    }
+}
+
+
+
+//18. Sum of squares of first n prime numbers
+Input = 4, Answer = 87
+Explanation: 2*2+3*3+5*5+7*7 = 87
+
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    int n = 4;
+	    List <int> ls = new();
+	    int sum = 0;
+	    int count = 0;
+	    int i = 2;
+	    
+	    while(count != n)
+	    {
+	        if(IsPrime(i))
+	        {
+	            sum = sum + i*i;
+	            count++;
+	        }
+	        i++;
+	    }
+	    Console.WriteLine(sum);
+    }
+    
+    public static bool IsPrime(int n)
+    {
+        int t = (int)Math.Sqrt(n);
+        
+        for(int i = 2; i <= t; i++)
+        {
+            if(n % i == 0)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+
+
+
+
+
+
+
+//19. count lowercase and uppercase
+input = "Hello world!"
+output = uppercase = 1, lowercase = 9
+using System;
+using System.Collections.Generic;
+
+public class HelloWorld
+{
+    public static void Main(string[] args)
+    {
+	    string s = "Hello world!";
+	    int u = 0, l = 0;
+	    
+	    foreach(char c in s)
+	    {
+	        if(Char.IsUpper(c))
+	        {
+	            u++;
+	        }else if(Char.IsLower(c))
+	        {
+	            l++;
+	        }
+	    }
+	    Console.WriteLine($"uppercase = {u}, lowercase = {l}");
+    }
+}
