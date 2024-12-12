@@ -1,0 +1,41 @@
+using System;
+
+class Program
+{
+    public static void Main()
+    {
+        // Primitive (Value Type) Example
+        int a = 10;
+        int b = a; // Value is copied
+        b = 20; // Changing b does not affect a
+        
+        Console.WriteLine("Primitive Types (Value Types):");
+        Console.WriteLine("a = " + a); // Output: a = 10
+        Console.WriteLine("b = " + b); // Output: b = 20
+
+        // Non-Primitive (Reference Type) Example
+        string str1 = "Hello";
+        string str2 = str1; // Reference is copied
+        str2 = "World"; // Changing str2 also changes str1 because strings are immutable, but they share the same reference.
+        
+        Console.WriteLine("\nNon-Primitive Types (Reference Types):");
+        Console.WriteLine("str1 = " + str1); // Output: str1 = Hello
+        Console.WriteLine("str2 = " + str2); // Output: str2 = World
+
+        // Non-Primitive (Reference Type) with a class
+        Person person1 = new Person();
+        person1.Name = "Alice";
+        Person person2 = person1; // person2 references the same object as person1
+        
+        person2.Name = "Bob"; // Changing the name using person2 also affects person1
+        
+        Console.WriteLine("\nClass (Reference Type) Example:");
+        Console.WriteLine("person1.Name = " + person1.Name); // Output: person1.Name = Bob
+        Console.WriteLine("person2.Name = " + person2.Name); // Output: person2.Name = Bob
+    }
+}
+
+class Person
+{
+    public string Name { get; set; }
+}

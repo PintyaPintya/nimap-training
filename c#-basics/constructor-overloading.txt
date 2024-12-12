@@ -1,0 +1,29 @@
+using System;
+
+class Person
+{
+    public Person()
+    {
+        Console.WriteLine("No parameters");
+    }
+
+    public Person(string name)
+    {
+        Console.WriteLine("Name: " + name);
+    }
+
+    public Person(string name, int age)
+    {
+        Console.WriteLine("Name: " + name + ", Age: " + age);
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Person person1 = new Person();
+        Person person2 = new Person("Qwer");
+        Person person3 = new Person("Qwer", 10);
+    }
+}

@@ -1,0 +1,37 @@
+using System;
+
+class Calculator
+{
+    public int Add(int a)
+    {
+        return a + 10;
+    }
+
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+
+    public double Add(double a, double b)
+    {
+        return a + b;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Calculator calc = new Calculator();
+
+        Console.WriteLine("Add one parameter: " + calc.Add(5));
+        Console.WriteLine("Add two parameters: " + calc.Add(5, 10));
+        Console.WriteLine("Add three parameters: " + calc.Add(5, 10, 15));
+        Console.WriteLine("Add double parameters: " + calc.Add(5.5, 10.5));
+    }
+}

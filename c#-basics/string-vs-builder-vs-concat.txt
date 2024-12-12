@@ -1,0 +1,24 @@
+using System;
+using System.Text;
+
+class Program
+{
+    static void Main()
+    {
+        string name = "John";
+        int age = 30;
+        string result1 = "My name is " + name + " and I am " + age + " years old.";
+        Console.WriteLine("Using String (Concatenation): " + result1);
+
+        StringBuilder sb = new StringBuilder();
+        sb.Append("My name is ");
+        sb.Append(name);
+        sb.Append(" and I am ");
+        sb.Append(age);
+        sb.Append(" years old.");
+        Console.WriteLine("Using StringBuilder: " + sb.ToString());
+
+        string result2 = $"My name is {name} and I am {age} years old.";
+        Console.WriteLine("Using String Interpolation: " + result2);
+    }
+}
