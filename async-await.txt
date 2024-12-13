@@ -1,58 +1,17 @@
-//Without async-await
-
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-public class HelloWorld
+class Program
 {
-    public static void Main(string[] args)
+    static void Main(string[] args)
     {
-        Method();
-        Console.WriteLine("Main thread");
-        Console.ReadLine();
+        Console.WriteLine("Main Method Started......");
+        SomeMethod();
+        Console.WriteLine("Main Method End");
+        Console.ReadKey();
     }
-    
-    public static void Method()
+
+    async static void SomeMethod()
     {
-        Task.Run(() => LongTask());
-        Console.WriteLine("Method exited");
-    }
-    
-    public static void LongTask()
-    {
-        Thread.Sleep(2000);
-        Console.WriteLine("Long Task Complete");
-    }
-}
-
-
-
-
-// With async-await
-
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-public class HelloWorld
-{
-    public static void Main(string[] args)
-    {
-        Method();
-        Console.WriteLine("Main thread");
-        Console.ReadLine();
-    }
-    
-    public static async void Method()
-    {
-        await Task.Run(() => LongTask());
-        Console.WriteLine("Method exited");
-    }
-    
-    public static void LongTask()
-    {
-        Thread.Sleep(2000);
-        Console.WriteLine("Long Task Complete");
+        Console.WriteLine("Some Method Started......");
+        await Task.Delay(3000);
+        Console.WriteLine("Some Method End");
     }
 }
