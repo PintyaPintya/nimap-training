@@ -1,56 +1,52 @@
-using System;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
-public class HelloWorld
+class Program
 {
-    public static void Main(string[] args)
+    static void Main(string[] args)
     {
-        Console.WriteLine("Starting parallel tasks...");
-        
-        Task task1 = Task.Run(() => DoWork("Task 1", 1000));
-        Task task2 = Task.Run(() => DoWork("Task 2", 2000));
-        Task task3 = Task.Run(() => DoWork("Task 3", 3000));
-        
-        Task.WhenAll(task1,task2,task3).Wait();
-        
-        Console.WriteLine("All tasks completed..");
-    }
-    
-    static void DoWork(string taskName, int delay)
-    {
-        Console.WriteLine($"{taskName} starting...");
-        Task.Delay(delay).Wait();
-        Console.WriteLine($"{taskName} completed after {delay/1000} seconds");
-    }
-}
+        var CTS = new CancellationTokenSource();
+        CTS.CancelAfter(5000);
 
+        try
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-
-
-
-
-
-
-
-
-using System;
-using System.Threading.Tasks;
-
-public class HelloWorld
-{
-    public static void Main(string[] args)
-    {
-        string[] items = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-        
-        Console.WriteLine("Starting parallel foreach loop...");
-        
-        Parallel.ForEach(items, item =>
+            var options = new ParallelOptions()
             {
-                Console.WriteLine($"{item} is being processed by {Task.CurrentId}");
-                Task.Delay(1000).Wait();
-            }
-        );
-        
-        Console.WriteLine("Parallel foreach loop completed.");
+                MaxDegreeOfParallelism = 2,
+                CancellationToken = CTS.Token
+            };
+
+            Parallel.Invoke(
+                options,
+                () => DoSomeTask(1),
+                () => DoSomeTask(2),
+                () => DoSomeTask(3),
+                () => DoSomeTask(4),
+                () => DoSomeTask(5),
+                () => DoSomeTask(6),
+                () => DoSomeTask(7),
+                () => DoSomeTask(8)
+            );
+
+            stopwatch.Stop();
+            Console.WriteLine($"Time Taken: {stopwatch.ElapsedMilliseconds / 1000.0} seconds");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            CTS.Dispose();
+        }
+    }
+
+    static void DoSomeTask(int n)
+    {
+        Console.WriteLine($"Task {n} started by Thread {Thread.CurrentThread.ManagedThreadId}");
+        Thread.Sleep(2000);
+        Console.WriteLine($"Task {n} completed by Thread {Thread.CurrentThread.ManagedThreadId}");
     }
 }
