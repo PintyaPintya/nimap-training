@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiPractice.Data;
+using WebApiPractice.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<LocationRepository>();
 
 var app = builder.Build();
 
