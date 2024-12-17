@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiPractice.Data;
@@ -10,9 +11,11 @@ namespace WebApiPractice.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-    public ProductsController(ApplicationDbContext context)
+    private readonly IMapper _mapper;
+    public ProductsController(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     [HttpGet]
@@ -22,20 +25,8 @@ public class ProductsController : ControllerBase
         {
             var products = await _context.Products.ToListAsync();
 
-            var productDtos = new List<ProductDto>();
-            foreach (var product in products)
-            {
-                var productDto = new ProductDto()
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.Price,
-                    IsAvailable = product.IsAvailable,
-                    Category = product.Category
-                };
-                productDtos.Add(productDto);
-            }
+            var productDtos = _mapper.Map<List<ProductDto>>(products);
+
             return Ok(productDtos);
         }
         catch (Exception ex)
@@ -52,15 +43,8 @@ public class ProductsController : ControllerBase
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) return NotFound();
 
-            var productDto = new ProductDto()
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                IsAvailable = product.IsAvailable,
-                Category = product.Category
-            };
+            var productDto = _mapper.Map<ProductDto>(product);
+
             return Ok(productDto);
         }
         catch (Exception ex)
@@ -76,17 +60,8 @@ public class ProductsController : ControllerBase
         {
             if (productCreateDto == null) return BadRequest("Invalid product data");
 
-            var product = new Product()
-            {
-                Name = productCreateDto.Name,
-                Description = productCreateDto.Description,
-                Price = productCreateDto.Price,
-                Category = productCreateDto.Category,
-                SupplierCost = productCreateDto.SupplierCost,
-                SupplierInfo = productCreateDto.SupplierInfo,
-                StockQuantity = productCreateDto.StockQuantity,
-                IsAvailable = productCreateDto.StockQuantity > 0
-            };
+            var product = _mapper.Map<Product>(productCreateDto);
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
@@ -108,13 +83,7 @@ public class ProductsController : ControllerBase
 
             if (productCreateDto == null) return BadRequest("Invalid product data");
 
-            product.Name = productCreateDto.Name;
-            product.Description = productCreateDto.Description;
-            product.Price = productCreateDto.Price;
-            product.Category = productCreateDto.Category;
-            product.SupplierCost = productCreateDto.SupplierCost;
-            product.SupplierInfo = productCreateDto.SupplierInfo;
-            product.StockQuantity = productCreateDto.StockQuantity;
+            _mapper.Map(productCreateDto, product);
             product.IsAvailable = productCreateDto.StockQuantity > 0;
 
             await _context.SaveChangesAsync();
