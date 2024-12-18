@@ -8,46 +8,28 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<Product> Products { get; set; }
-    public DbSet<Country> Countries { get; set; }
-    public DbSet<State> States { get; set; }
-    public DbSet<City> Cities { get; set; }
-
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<DiscountRule> DiscountRules { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-                    modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = 1, Name = "Laptop", Price = 750.00m, Stock = 20, CategoryId = 1 },
-                new Product { ProductId = 2, Name = "Smartphone", Price = 500.00m, Stock = 50, CategoryId = 2 },
-                new Product { ProductId = 3, Name = "Headphones", Price = 100.00m, Stock = 100, CategoryId = 3 }
-            );
-
-        modelBuilder.Entity<Country>().HasData(
-            new Country { CountryId = 1, Name = "India" },
-            new Country { CountryId = 2, Name = "United States" },
-            new Country { CountryId = 3, Name = "Canada" },
-            new Country { CountryId = 4, Name = "United Kingdom" }
+        modelBuilder.Entity<Category>().HasData(
+    new Category { CategoryId = 1, CategoryName = "Electronics", Description = "Electronic gadgets and devices" },
+    new Category { CategoryId = 2, CategoryName = "Books", Description = "Various genres of books" },
+    new Category { CategoryId = 3, CategoryName = "Home Appliances", Description = "Appliances for everyday home use" }
+);
+        // Seed data for DiscountRule table
+        modelBuilder.Entity<DiscountRule>().HasData(
+            new DiscountRule { DiscountRuleId = 1, MinimumPrice = 100, MaximumDiscount = 10 },
+            new DiscountRule { DiscountRuleId = 2, MinimumPrice = 500, MaximumDiscount = 20 },
+            new DiscountRule { DiscountRuleId = 3, MinimumPrice = 999, MaximumDiscount = 30 }
         );
-        // Seeding data for States
-        modelBuilder.Entity<State>().HasData(
-            new State { StateId = 1, Name = "California", CountryId = 2 },
-            new State { StateId = 2, Name = "Texas", CountryId = 2 },
-            new State { StateId = 3, Name = "British Columbia", CountryId = 3 },
-            new State { StateId = 4, Name = "Ontario", CountryId = 3 },
-            new State { StateId = 5, Name = "England", CountryId = 4 },
-            new State { StateId = 6, Name = "Maharashtra", CountryId = 1 },
-            new State { StateId = 7, Name = "Delhi", CountryId = 1 }
-        );
-        // Seeding data for Cities
-        modelBuilder.Entity<City>().HasData(
-            new City { CityId = 1, Name = "Los Angeles", StateId = 1 },
-            new City { CityId = 2, Name = "San Francisco", StateId = 1 },
-            new City { CityId = 3, Name = "Houston", StateId = 2 },
-            new City { CityId = 4, Name = "Dallas", StateId = 2 },
-            new City { CityId = 5, Name = "Vancouver", StateId = 3 },
-            new City { CityId = 6, Name = "Toronto", StateId = 4 },
-            new City { CityId = 7, Name = "London", StateId = 5 },
-            new City { CityId = 8, Name = "Mumbai", StateId = 6 },
-            new City { CityId = 9, Name = "Pune", StateId = 6 }
+        // Seed data for Product table
+        modelBuilder.Entity<Product>().HasData(
+            new Product { ProductId = 1, Name = "Novel", Price = 50, CategoryId = 2, Discount = 0, Description = "Bestselling novel with an intriguing plot" },
+            new Product { ProductId = 2, Name = "Microwave", Price = 150, CategoryId = 3, Discount = 10, Description = "Compact microwave oven suitable for small kitchens" },
+            new Product { ProductId = 3, Name = "Smartphone", Price = 800, CategoryId = 1, Discount = 20, Description = "Latest model smartphone with advanced features" },
+            new Product { ProductId = 4, Name = "Laptop", Price = 1200, CategoryId = 1, Discount = 30, Description = "High-performance laptop for gaming and productivity" }
         );
     }
 }
