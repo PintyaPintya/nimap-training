@@ -1,6 +1,9 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using WebApiPractice.Data;
 using WebApiPractice.Repository;
+using WebApiPractice.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<ProductValidator>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<LocationRepository>();

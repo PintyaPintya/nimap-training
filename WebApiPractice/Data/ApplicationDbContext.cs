@@ -14,52 +14,19 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Seeding initial Product records into the database
-        modelBuilder.Entity<Product>().HasData(
-            new Product
-            {
-                Id = 1,
-                Name = "Laptop",
-                Description = "High-end gaming laptop",
-                Price = 1500.99m,
-                IsAvailable = true,
-                Category = "Electronics",
-                SupplierCost = 1200.00m,  // Internal/sensitive info
-                SupplierInfo = "Tech Supplier Co.",
-                StockQuantity = 50
-            },
-            new Product
-            {
-                Id = 2,
-                Name = "Smartphone",
-                Description = "Latest model with advanced features",
-                Price = 999.99m,
-                IsAvailable = true,
-                Category = "Electronics",
-                SupplierCost = 750.00m,  // Internal/sensitive info
-                SupplierInfo = "Mobile Solutions Inc.",
-                StockQuantity = 100
-            },
-            new Product
-            {
-                Id = 3,
-                Name = "Desk Chair",
-                Description = "Ergonomic office chair",
-                Price = 299.99m,
-                IsAvailable = true,
-                Category = "Furniture",
-                SupplierCost = 200.00m,  // Internal/sensitive info
-                SupplierInfo = "Furniture Plus Ltd.",
-                StockQuantity = 25
-            }
-        );
+
+                    modelBuilder.Entity<Product>().HasData(
+                new Product { ProductId = 1, Name = "Laptop", Price = 750.00m, Stock = 20, CategoryId = 1 },
+                new Product { ProductId = 2, Name = "Smartphone", Price = 500.00m, Stock = 50, CategoryId = 2 },
+                new Product { ProductId = 3, Name = "Headphones", Price = 100.00m, Stock = 100, CategoryId = 3 }
+            );
 
         modelBuilder.Entity<Country>().HasData(
-    new Country { CountryId = 1, Name = "India" },
-    new Country { CountryId = 2, Name = "United States" },
-    new Country { CountryId = 3, Name = "Canada" },
-    new Country { CountryId = 4, Name = "United Kingdom" }
-);
+            new Country { CountryId = 1, Name = "India" },
+            new Country { CountryId = 2, Name = "United States" },
+            new Country { CountryId = 3, Name = "Canada" },
+            new Country { CountryId = 4, Name = "United Kingdom" }
+        );
         // Seeding data for States
         modelBuilder.Entity<State>().HasData(
             new State { StateId = 1, Name = "California", CountryId = 2 },
