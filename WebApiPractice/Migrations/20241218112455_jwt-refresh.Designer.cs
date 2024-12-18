@@ -10,8 +10,8 @@ using WebApiPractice.Data;
 namespace WebApiPractice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241218101449_jwt")]
-    partial class jwt
+    [Migration("20241218112455_jwt-refresh")]
+    partial class jwtrefresh
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,6 @@ namespace WebApiPractice.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")

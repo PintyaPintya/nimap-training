@@ -7,7 +7,7 @@
 namespace WebApiPractice.Migrations
 {
     /// <inheritdoc />
-    public partial class jwt : Migration
+    public partial class jwtrefresh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace WebApiPractice.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Username = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Email = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: true),
                     Roles = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
