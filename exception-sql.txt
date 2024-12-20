@@ -1,0 +1,29 @@
+CREATE PROCEDURE spDivideTwoNumbers
+    @Number1 INT, 
+    @Number2 INT
+AS
+BEGIN
+    DECLARE @Result INT
+    SET @Result = 0
+
+    IF(@Number2 = 0)
+    BEGIN
+        RAISERROR('Second Number cannot be zero', 16, 1)
+    END
+    ELSE
+    BEGIN
+        SET @Result = @Number1 / @Number2
+
+        IF(@@ERROR <> 0)
+        BEGIN
+            PRINT 'Error occurred during division.'
+        END
+        ELSE
+        BEGIN
+            PRINT 'RESULT IS: ' + CAST(@Result AS VARCHAR)
+        END
+    END
+END
+
+
+EXEC spDivideTwoNumbers 100, 0

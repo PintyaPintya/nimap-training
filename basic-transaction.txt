@@ -1,0 +1,34 @@
+CREATE TABLE Product
+(
+ ProductID INT PRIMARY KEY, 
+ Name VARCHAR(40), 
+ Price INT,
+ Quantity INT
+ )
+ GO
+
+ INSERT INTO Product VALUES(101, 'Product-1', 100, 10)
+ INSERT INTO Product VALUES(102, 'Product-2', 200, 15)
+ INSERT INTO Product VALUES(103, 'Product-3', 300, 20)
+ INSERT INTO Product VALUES(104, 'Product-4', 400, 25)
+
+
+BEGIN TRANSACTION
+ INSERT INTO Product VALUES(105,'Product-5',500, 30)
+ UPDATE Product SET Price =350 WHERE ProductID = 103
+ DELETE FROM Product WHERE ProductID = 103
+COMMIT TRANSACTION
+
+
+BEGIN TRANSACTION
+INSERT INTO Product VALUES(110,'Product-10',600, 30)
+INSERT INTO Product VALUES(110,'Product-10',600, 30)
+
+IF(@@ERROR > 0)
+BEGIN
+    Rollback Transaction
+END
+ELSE
+BEGIN
+   Commit Transaction
+END
