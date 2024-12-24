@@ -1,0 +1,70 @@
+-- Dirty read
+CREATE TABLE Products
+(
+    Id INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Quantity INT
+)
+Go
+
+INSERT INTO Products values (1001, 'Mobile', 10)
+INSERT INTO Products values (1002, 'Tablet', 20)
+INSERT INTO Products values (1003, 'Laptop', 30)
+
+
+BEGIN TRANSACTION
+  UPDATE Products SET Quantity = 5 WHERE Id=1001
+  -- Billing the customer
+  Waitfor Delay '00:00:05'
+  -- Insufficient Funds. Rollback transaction
+ROLLBACK TRANSACTION
+SELECT * FROM Products WHERE Id=1001
+
+SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+SELECT * FROM Products WHERE Id=1001
+
+
+
+
+
+
+
+
+-- Lost update
+BEGIN TRANSACTION
+  DECLARE @QunatityAvailable int
+  SELECT @QunatityAvailable = Quantity FROM Products WHERE Id=1001
+
+  WAITFOR DELAY '00:00:05'
+
+  SET @QunatityAvailable = @QunatityAvailable - 1
+  UPDATE Products SET Quantity = @QunatityAvailable  WHERE Id=1001
+  Print @QunatityAvailable
+COMMIT TRANSACTION
+
+BEGIN TRANSACTION
+  DECLARE @QunatityAvailable int
+  SELECT @QunatityAvailable = Quantity FROM Products WHERE Id=1001
+
+  SET @QunatityAvailable = @QunatityAvailable - 2
+  UPDATE Products SET Quantity = @QunatityAvailable WHERE Id=1001
+  Print @QunatityAvailable
+COMMIT TRANSACTION
+
+
+
+
+
+
+
+
+-- Non repeatable read
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+BEGIN TRANSACTION
+SELECT Quantity FROM Products WHERE Id = 1001
+WAITFOR DELAY '00:00:05'
+SELECT Quantity FROM Products WHERE Id = 1001
+COMMIT TRANSACTION
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED
+UPDATE Products SET Quantity = 5 WHERE Id = 1001
