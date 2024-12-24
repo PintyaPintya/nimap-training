@@ -1,0 +1,25 @@
+using System;
+using System.Text;
+class HelloWorld {
+	static void Main() {
+		StringBuilder s = new StringBuilder("qwer tyui");
+		Console.WriteLine(ReverseString(s));
+	}
+
+	static string ReverseString(StringBuilder s)
+	{
+		int low = 0, high = s.Length - 1;
+
+		while(low < high)
+		{
+			char temp = s[low];
+			s[low] = s[high];
+			s[high] = temp;
+
+			low++;
+			high--;
+		}
+		
+		return s.ToString();
+	}
+}
