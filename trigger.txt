@@ -1,0 +1,219 @@
+CREATE TABLE Employee
+(
+  Id int Primary Key,
+  Name nvarchar(30),
+  Salary int,
+  Gender nvarchar(10),
+  DepartmentId int
+)
+GO
+
+INSERT INTO Employee VALUES (1,'Pranaya', 5000, 'Male', 3)
+INSERT INTO Employee VALUES (2,'Priyanka', 5400, 'Female', 2)
+INSERT INTO Employee VALUES (3,'Anurag', 6500, 'male', 1)
+INSERT INTO Employee VALUES (4,'sambit', 4700, 'Male', 2)
+INSERT INTO Employee VALUES (5,'Hina', 6600, 'Female', 3)
+
+
+create trigger trAllDMLOperationsOnEmplyee
+on employee
+for insert, update, delete
+as
+begin
+	if datepart(dw, getDate()) = 2 --dw is weekday
+	begin
+		print 'dml operations are restricted on monday'
+		rollback transaction
+	end
+	else if datepart(hh, GETDATE()) < 13 --hh is hour
+	begin
+		print 'invalid time for dml operations'
+		rollback transaction
+	end
+end
+
+
+INSERT INTO Employee VALUES (6, ‘Saroj’, 7600, ‘Male’, 1) --will not run on Monday or anyday before 1 pm
+
+
+
+
+
+
+
+CREATE TRIGGER tr_Employee_For_Insert
+ON Employee
+FOR INSERT
+AS
+BEGIN
+	DECLARE @ID INT
+	DECLARE @Name VARCHAR(100)
+	DECLARE @AuditData VARCHAR(100)
+
+	SELECT @ID = ID, @Name = Name FROM INSERTED
+	SET @AuditData = 'New employee Added with ID = ' + CAST(@ID AS VARCHAR(10)) + ' and Name = ' + @Name
+	INSERT INTO EmployeeAudit (AuditData, AuditDate) VALUES(@AuditData,	GETDATE())
+END
+
+INSERT INTO Employee VALUES (6, ‘Saroj’, 3300, ‘Male’, 2)
+SELECT * FROM EmployeeAudit
+
+
+
+
+
+
+
+
+CREATE TABLE Department
+(
+  ID INT PRIMARY KEY,
+  Name VARCHAR(50)
+)
+GO
+
+INSERT INTO Department VALUES(1, 'IT')
+INSERT INTO Department VALUES(2, 'HR')
+INSERT INTO Department VALUES(3, 'Sales')
+
+CREATE TABLE Employee
+(
+  ID INT PRIMARY KEY,
+  Name VARCHAR(50),
+  Gender VARCHAR(50),
+  DOB DATETIME,
+  Salary DECIMAL(18,2),
+  DeptID INT
+)
+GO
+
+INSERT INTO Employee VALUES(1, 'Pranaya', 'Male','1996-02-29 10:53:27.060', 25000, 1)
+INSERT INTO Employee VALUES(2, 'Priyanka', 'Female','1995-05-25 10:53:27.060', 30000, 2)
+INSERT INTO Employee VALUES(3, 'Anurag', 'Male','1995-04-19 10:53:27.060',40000, 2)
+INSERT INTO Employee VALUES(4, 'Preety', 'Female','1996-03-17 10:53:27.060', 35000, 3)
+INSERT INTO Employee VALUES(5, 'Sambit', 'Male','1997-01-15 10:53:27.060', 27000, 1)
+INSERT INTO Employee VALUES(6, 'Hina', 'Female','1995-07-12 10:53:27.060', 33000, 2)
+GO
+
+CREATE VIEW vwEmployeeDetails
+AS
+SELECT emp.ID, emp.Name, Gender, Salary, dept.Name AS Department
+FROM Employee emp
+INNER JOIN Department dept
+ON emp.DeptID = dept.ID
+
+CREATE TRIGGER tr_vwEmployeeDetails_InsteadOfInsert
+ON vwEmployeeDetails
+INSTEAD OF INSERT
+AS
+BEGIN
+	DECLARE @DepartmentId INT
+	SELECT @DepartmentId = dept.ID
+	FROM Department dept
+	INNER JOIN INSERTED inst
+	ON inst.Department = dept.Name
+
+	IF(@DepartmentId is null)
+	BEGIN
+		RAISERROR('Invalid Department Name. Statement terminated', 16, 1)
+		RETURN
+	END
+
+	INSERT INTO Employee(ID, Name, Gender, Salary, DeptID)
+	SELECT ID, Name, Gender, Salary, @DepartmentId
+	FROM INSERTED
+END
+
+INSERT INTO vwEmployeeDetails VALUES(7, ‘Saroj’, ‘Male’, 50000, ‘IT’)
+
+
+
+
+
+
+
+CREATE TRIGGER tr_vwEmployeeDetails_InsteadOfUpdate
+ON vwEmployeeDetails
+INSTEAD OF UPDATE
+AS
+BEGIN
+	IF(UPDATE(ID))
+	BEGIN
+		RAISERROR('ID cannot be changed',16,1)
+		RETURN
+	END
+
+	IF(UPDATE(Department))
+	BEGIN
+		DECLARE @DepartmentID INT
+		SELECT @DepartmentID = dept.ID
+		FROM Department dept
+		INNER JOIN INSERTED inst
+		ON dept.Name = inst.Department
+
+		IF(@DepartmentID is null)
+		BEGIN
+			RAISERROR('Invalid department name',16,1)
+			RETURN
+		END
+
+		UPDATE Employee SET DeptID = @DepartmentID
+		FROM INSERTED
+		INNER JOIN Employee
+		on Employee.ID = INSERTED.ID
+	END
+
+	IF(UPDATE(Gender))
+	BEGIN
+		UPDATE Employee SET Gender = INSERTED.Gender
+		FROM INSERTED
+		INNER JOIN Employee
+		ON Employee.ID = INSERTED.ID
+	END
+	IF(UPDATE(Salary))
+	BEGIN
+		UPDATE Employee SET Salary = INSERTED.Salary
+		FROM INSERTED
+		INNER JOIN Employee
+		ON Employee.ID = INSERTED.ID
+	END
+	IF(UPDATE(Name))
+	BEGIN
+		UPDATE Employee SET Name = INSERTED.Name
+		FROM INSERTED
+		INNER JOIN Employee
+		ON Employee.ID = INSERTED.ID
+	END
+END
+
+UPDATE vwEmployeeDetails SET Department = 'HR' WHERE Id = 1
+
+SELECT * FROM vwEmployeeDetails
+
+
+
+
+
+
+
+
+
+
+CREATE TRIGGER trRestrictDDLEvents
+ON DATABASE
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN 
+   PRINT 'You cannot create, alter or drop a table'
+   ROLLBACK TRANSACTION
+END
+
+
+CREATE TRIGGER trServerScopedDDLTrigger
+ON ALL SERVER
+FOR CREATE_TABLE, ALTER_TABLE, DROP_TABLE
+AS
+BEGIN 
+   PRINT 'You cannot create, alter or drop a table in any database of this server'
+   ROLLBACK TRANSACTION
+END
