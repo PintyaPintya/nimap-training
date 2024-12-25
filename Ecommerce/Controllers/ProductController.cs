@@ -3,170 +3,171 @@ using Ecommerce.Models;
 using Ecommerce.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Ecommerce.Controllers
+namespace Ecommerce.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class ProductController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ProductController : ControllerBase
+    private readonly IProductRepository _productRepository;
+
+    public ProductController(IProductRepository productRepository)
     {
-        private readonly IProductRepository _productRepository;
+        _productRepository = productRepository;
+    }
 
-        public ProductController(IProductRepository productRepository)
+    [HttpGet("/api/products")]
+    public async Task<ActionResult<List<ProductDto>>> GetAllActiveProducts()
+    {
+        try
         {
-            _productRepository = productRepository;
-        }
+            var products = await _productRepository.GetAllProducts();
 
-        [HttpGet("/api/products")]
-        public async Task<ActionResult<List<ProductDto>>> GetAllActiveProducts()
-        {
-            try
+            if(products.Count < 1) return Ok("No products are listed yet");
+
+            var productDtos = new List<ProductDto>();
+            foreach (var product in products)
             {
-                var products = await _productRepository.GetAllProducts();
-
-                var productDtos = new List<ProductDto>();
-                foreach (var product in products)
-                {
-                    var productDto = new ProductDto()
-                    {
-                        Name = product.Name,
-                        Price = product.Price,
-                        Description = product.Description
-                    };
-                    productDtos.Add(productDto);
-                }
-
-                return Ok(productDtos);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while retrieving products.", Details = ex.Message });
-            }
-        }
-
-        [HttpGet("/api/disabled-products")]
-        public async Task<ActionResult<List<ProductDto>>> GetAllDisabledProducts()
-        {
-            try
-            {
-                var products = await _productRepository.GetAllDisabledProducts();
-                
-                var productDtos = new List<ProductDto>();
-                foreach(var product in  products)
-                {
-                    var productDto = new ProductDto()
-                    {
-                        Name = product.Name,
-                        Price = product.Price,
-                        Description = product.Description
-                    };
-                    productDtos.Add(productDto);
-                }
-
-                return Ok(productDtos);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while retrieving disabled products.", Details = ex.Message });
-            }
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDto>> GetProductById(int id)
-        {
-            try
-            {
-                var product = await _productRepository.GetProductById(id);
-                if (product == null || product.IsDeleted) return NotFound($"Product with Id: {id} does not exist");
-
                 var productDto = new ProductDto()
                 {
                     Name = product.Name,
                     Price = product.Price,
                     Description = product.Description
                 };
+                productDtos.Add(productDto);
+            }
 
-                return Ok(productDto);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = $"An error occurred while retrieving the product with Id: {id}", Details = ex.Message });
-            }
+            return Ok(productDtos);
         }
-
-        [HttpPost]
-        public async Task<ActionResult> AddProduct(CreateProductDto createProductDto)
+        catch (Exception ex)
         {
-            try
-            {
-                bool productNameExists = await _productRepository.CheckIfProductNameExists(createProductDto.Name);
-                if (productNameExists) return BadRequest("Product already exists");
+            return StatusCode(500, new { Message = "An error occurred while retrieving products.", Details = ex.Message });
+        }
+    }
 
-                var product = new Product()
+    [HttpGet("/api/disabled-products")]
+    public async Task<ActionResult<List<ProductDto>>> GetAllDisabledProducts()
+    {
+        try
+        {
+            var products = await _productRepository.GetAllDisabledProducts();
+
+            var productDtos = new List<ProductDto>();
+            foreach (var product in products)
+            {
+                var productDto = new ProductDto()
                 {
-                    Name = createProductDto.Name,
-                    Price = createProductDto.Price,
-                    Quantity = createProductDto.Quantity,
-                    Description = createProductDto.Description,
-                    IsDeleted = false,
-                    Orders = new List<Order>()
+                    Name = product.Name,
+                    Price = product.Price,
+                    Description = product.Description
                 };
-                await _productRepository.AddProduct(product);
-                return Ok(createProductDto);
+                productDtos.Add(productDto);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while adding the product", Details = ex.Message });
-            }
+
+            return Ok(productDtos);
         }
-
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> EditProduct(int id, EditProductDto editProductDto)
+        catch (Exception ex)
         {
-            try
-            {
-                var product = await _productRepository.GetProductById(id);
-                if (product == null) return NotFound($"Product with Id: {id} does not exist");
-
-                // only checks if product name exists if the product name is changed
-                if (!string.Equals(editProductDto.Name, product.Name, StringComparison.OrdinalIgnoreCase))
-                {
-                    bool productNameExists = await _productRepository.CheckIfProductNameExists(editProductDto.Name);
-                    if (productNameExists)
-                        return BadRequest("Product with this name already exists");
-                }
-
-                product.Name = editProductDto.Name;
-                product.Price = editProductDto.Price;
-                product.Quantity = editProductDto.Quantity;
-                product.Description = editProductDto.Description;
-                product.IsDeleted = editProductDto.IsDeleted;
-
-                await _productRepository.EditProduct(product);
-                return Ok(editProductDto);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { Message = "An error occurred while editing the product", Details = ex.Message });
-            }
+            return StatusCode(500, new { Message = "An error occurred while retrieving disabled products.", Details = ex.Message });
         }
+    }
 
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteProduct(int id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<ProductDto>> GetProductById(int id)
+    {
+        try
         {
-            try
-            {
-                var product = await _productRepository.GetProductById(id);
-                if (product == null) return NotFound($"Product with Id: {id} does not exist");
+            var product = await _productRepository.GetProductById(id);
+            if (product == null || product.IsDeleted) return NotFound($"Product with Id: {id} does not exist");
 
-                product.IsDeleted = true;
-
-                await _productRepository.EditProduct(product);
-                return NoContent();
-            }
-            catch (Exception ex)
+            var productDto = new ProductDto()
             {
-                return StatusCode(500, new { Message = "An error occurred while removing the product", Details = ex.Message });
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description
+            };
+
+            return Ok(productDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = $"An error occurred while retrieving the product with Id: {id}", Details = ex.Message });
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> AddProduct(CreateProductDto createProductDto)
+    {
+        try
+        {
+            bool productNameExists = await _productRepository.CheckIfProductNameExists(createProductDto.Name);
+            if (productNameExists) return BadRequest("Product already exists");
+
+            var product = new Product()
+            {
+                Name = createProductDto.Name,
+                Price = createProductDto.Price,
+                Quantity = createProductDto.Quantity,
+                Description = createProductDto.Description,
+                IsDeleted = false,
+                Orders = new List<Order>()
+            };
+            await _productRepository.AddProduct(product);
+            return Ok(createProductDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while adding the product", Details = ex.Message });
+        }
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult> EditProduct(int id, EditProductDto editProductDto)
+    {
+        try
+        {
+            var product = await _productRepository.GetProductById(id);
+            if (product == null) return NotFound($"Product with Id: {id} does not exist");
+
+            // only checks if product name exists if the product name is changed
+            if (!string.Equals(editProductDto.Name, product.Name, StringComparison.OrdinalIgnoreCase))
+            {
+                bool productNameExists = await _productRepository.CheckIfProductNameExists(editProductDto.Name);
+                if (productNameExists)
+                    return BadRequest("Product with this name already exists");
             }
+
+            product.Name = editProductDto.Name;
+            product.Price = editProductDto.Price;
+            product.Quantity = editProductDto.Quantity;
+            product.Description = editProductDto.Description;
+            product.IsDeleted = editProductDto.IsDeleted;
+
+            await _productRepository.EditProduct(product);
+            return Ok(editProductDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while editing the product", Details = ex.Message });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteProduct(int id)
+    {
+        try
+        {
+            var product = await _productRepository.GetProductById(id);
+            if (product == null) return NotFound($"Product with Id: {id} does not exist");
+
+            product.IsDeleted = true;
+
+            await _productRepository.EditProduct(product);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "An error occurred while removing the product", Details = ex.Message });
         }
     }
 }
