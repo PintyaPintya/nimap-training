@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ecommerce.Models.Dto;
 
-public class CustomerDto
+public class EditCustomerDto
 {
     [Required]
     public required string Name { get; set; }
@@ -13,4 +13,7 @@ public class CustomerDto
 
     [Required]
     public required string Address { get; set; }
+
+    [Required]
+    public bool IsDeleted { get; set; } = false;
 }

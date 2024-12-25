@@ -52,6 +52,8 @@ public class ProductController : ControllerBase
         {
             var products = await _productRepository.GetAllDisabledProducts();
 
+            if(products.Count < 1) return Ok("No disabled products");
+
             var productDtos = new List<ProductDto>();
             foreach (var product in products)
             {
@@ -133,8 +135,7 @@ public class ProductController : ControllerBase
             if (!string.Equals(editProductDto.Name, product.Name, StringComparison.OrdinalIgnoreCase))
             {
                 bool productNameExists = await _productRepository.CheckIfProductNameExists(editProductDto.Name);
-                if (productNameExists)
-                    return BadRequest("Product with this name already exists");
+                if (productNameExists) return BadRequest("Product with this name already exists");
             }
 
             product.Name = editProductDto.Name;

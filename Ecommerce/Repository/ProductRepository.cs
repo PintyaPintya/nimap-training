@@ -23,7 +23,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception($"An error occurred while retrieving the products " + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -37,7 +37,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception($"An error occurred while retrieving disabled products " + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -49,7 +49,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception($"An error occurred while retrieving the product with Id: {id}" + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -62,7 +62,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while checking the product name: " + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -75,7 +75,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while adding the product: " + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -88,7 +88,7 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while editing the product: " + ex.Message);
+            throw new Exception(ex.Message);
         }
     }
 }
