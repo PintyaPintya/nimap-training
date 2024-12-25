@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Ecommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialModelCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -67,6 +69,33 @@ namespace Ecommerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OrderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OrderProduct",
                 columns: table => new
                 {
@@ -90,6 +119,44 @@ namespace Ecommerce.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "Address", "Email", "IsDeleted", "Name" },
+                values: new object[,]
+                {
+                    { 1, "123 Main St", "john.doe@example.com", false, "John Doe" },
+                    { 2, "456 Elm St", "jane.smith@example.com", false, "Jane Smith" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "Description", "IsDeleted", "Name", "Price", "Quantity" },
+                values: new object[,]
+                {
+                    { 1, "4K Ultra HD TV", false, "TV", 499.99m, 50 },
+                    { 2, "High-performance laptop", false, "Laptop", 999.99m, 30 },
+                    { 3, "Latest model smartphone", false, "Smartphone", 799.99m, 100 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "CustomerId", "OrderDate", "Status", "TotalAmount" },
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Completed", 1499.97m },
+                    { 2, 2, new DateTime(2024, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Pending", 999.99m }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_ProductId",
+                table: "OrderItems",
+                column: "ProductId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_OrderProduct_ProductsId",
                 table: "OrderProduct",
@@ -104,6 +171,9 @@ namespace Ecommerce.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "OrderItems");
+
             migrationBuilder.DropTable(
                 name: "OrderProduct");
 

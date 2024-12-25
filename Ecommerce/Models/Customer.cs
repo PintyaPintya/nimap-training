@@ -11,7 +11,7 @@ public class Customer
     public required string Name { get; set; }
 
     [Required]
-    [EmailAddress]
+    [EmailAddress(ErrorMessage = "Invalid Email address")]
     public required string Email { get; set; }
 
     [Required]

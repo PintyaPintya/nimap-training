@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241224100115_InitialModelCreate")]
-    partial class InitialModelCreate
+    [Migration("20241225101011_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,6 +44,24 @@ namespace Ecommerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St",
+                            Email = "john.doe@example.com",
+                            IsDeleted = false,
+                            Name = "John Doe"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "456 Elm St",
+                            Email = "jane.smith@example.com",
+                            IsDeleted = false,
+                            Name = "Jane Smith"
+                        });
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Order", b =>
@@ -70,6 +88,48 @@ namespace Ecommerce.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            OrderDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Completed",
+                            TotalAmount = 1499.97m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            OrderDate = new DateTime(2024, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Status = "Pending",
+                            TotalAmount = 999.99m
+                        });
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.OrderItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Product", b =>
@@ -97,6 +157,35 @@ namespace Ecommerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "4K Ultra HD TV",
+                            IsDeleted = false,
+                            Name = "TV",
+                            Price = 499.99m,
+                            Quantity = 50
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "High-performance laptop",
+                            IsDeleted = false,
+                            Name = "Laptop",
+                            Price = 999.99m,
+                            Quantity = 30
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Latest model smartphone",
+                            IsDeleted = false,
+                            Name = "Smartphone",
+                            Price = 799.99m,
+                            Quantity = 100
+                        });
                 });
 
             modelBuilder.Entity("OrderProduct", b =>
@@ -123,6 +212,25 @@ namespace Ecommerce.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.OrderItem", b =>
+                {
+                    b.HasOne("Ecommerce.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("OrderProduct", b =>

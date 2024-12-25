@@ -13,6 +13,7 @@ public class Product
 
     [Required]
     [Column(TypeName = "decimal(16,2)")]
+    [Range(0, double.MaxValue, ErrorMessage = "Price cannot be negative")]
     public required decimal Price { get; set; }
 
     [Required]
