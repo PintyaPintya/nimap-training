@@ -25,7 +25,20 @@ public class ProductRepository : IProductRepository
         {
             throw new Exception($"An error occurred while retrieving the products " + ex.Message);
         }
+    }
 
+    public async Task<ICollection<Product>> GetAllDisabledProducts()
+    {
+        try
+        {
+            return await _context.Products
+                .Where(p => p.IsDeleted)
+                .ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"An error occurred while retrieving disabled products " + ex.Message);
+        }
     }
 
     public async Task<Product?> GetProductById(int id)
@@ -76,19 +89,6 @@ public class ProductRepository : IProductRepository
         catch (Exception ex)
         {
             throw new Exception("An error occurred while editing the product: " + ex.Message);
-        }
-    }
-
-    public async Task RemoveProduct(Product product)
-    {
-        try
-        {
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("An error occurred while removing the product: " + ex.Message);
         }
     }
 }

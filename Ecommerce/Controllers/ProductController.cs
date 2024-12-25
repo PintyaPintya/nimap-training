@@ -17,7 +17,7 @@ namespace Ecommerce.Controllers
         }
 
         [HttpGet("/api/products")]
-        public async Task<ActionResult<List<ProductDto>>> GetAllProducts()
+        public async Task<ActionResult<List<ProductDto>>> GetAllActiveProducts()
         {
             try
             {
@@ -40,6 +40,33 @@ namespace Ecommerce.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { Message = "An error occurred while retrieving products.", Details = ex.Message });
+            }
+        }
+
+        [HttpGet("/api/disabled-products")]
+        public async Task<ActionResult<List<ProductDto>>> GetAllDisabledProducts()
+        {
+            try
+            {
+                var products = await _productRepository.GetAllDisabledProducts();
+                
+                var productDtos = new List<ProductDto>();
+                foreach(var product in  products)
+                {
+                    var productDto = new ProductDto()
+                    {
+                        Name = product.Name,
+                        Price = product.Price,
+                        Description = product.Description
+                    };
+                    productDtos.Add(productDto);
+                }
+
+                return Ok(productDtos);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving disabled products.", Details = ex.Message });
             }
         }
 
@@ -131,7 +158,9 @@ namespace Ecommerce.Controllers
                 var product = await _productRepository.GetProductById(id);
                 if (product == null) return NotFound($"Product with Id: {id} does not exist");
 
-                await _productRepository.RemoveProduct(product);
+                product.IsDeleted = true;
+
+                await _productRepository.EditProduct(product);
                 return NoContent();
             }
             catch (Exception ex)
