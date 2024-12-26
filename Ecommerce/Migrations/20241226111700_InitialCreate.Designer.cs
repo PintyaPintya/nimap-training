@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241226060312_InitialCreate")]
+    [Migration("20241226111700_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -93,8 +93,8 @@ namespace Ecommerce.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("OrderDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -114,7 +114,7 @@ namespace Ecommerce.Migrations
                         {
                             Id = 1,
                             CustomerId = 1,
-                            OrderDate = new DateTime(2024, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateOnly(2024, 1, 15),
                             Status = "Completed",
                             TotalAmount = 1499.97m
                         },
@@ -122,13 +122,13 @@ namespace Ecommerce.Migrations
                         {
                             Id = 2,
                             CustomerId = 2,
-                            OrderDate = new DateTime(2024, 2, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            OrderDate = new DateOnly(2024, 2, 10),
                             Status = "Pending",
                             TotalAmount = 999.99m
                         });
                 });
 
-            modelBuilder.Entity("Ecommerce.Models.OrderItem", b =>
+            modelBuilder.Entity("Ecommerce.Models.OrderProduct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +151,7 @@ namespace Ecommerce.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Product", b =>
@@ -212,21 +212,6 @@ namespace Ecommerce.Migrations
                         });
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("Ecommerce.Models.Order", b =>
                 {
                     b.HasOne("Ecommerce.Models.Customer", "Customer")
@@ -238,16 +223,16 @@ namespace Ecommerce.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Ecommerce.Models.OrderItem", b =>
+            modelBuilder.Entity("Ecommerce.Models.OrderProduct", b =>
                 {
                     b.HasOne("Ecommerce.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ecommerce.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -257,22 +242,17 @@ namespace Ecommerce.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
+            modelBuilder.Entity("Ecommerce.Models.Customer", b =>
                 {
-                    b.HasOne("Ecommerce.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ecommerce.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Ecommerce.Models.Customer", b =>
+            modelBuilder.Entity("Ecommerce.Models.Order", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.Product", b =>
                 {
                     b.Navigation("Orders");
                 });

@@ -117,7 +117,7 @@ public class ProductController : ControllerBase
                 Quantity = createProductDto.Quantity,
                 Description = createProductDto.Description,
                 IsDeleted = false,
-                Orders = new List<Order>()
+                Orders = new List<OrderProduct>()
             };
             await _productRepository.AddProduct(product);
             return Ok(createProductDto);

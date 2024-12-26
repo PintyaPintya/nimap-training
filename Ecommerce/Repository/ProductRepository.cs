@@ -53,6 +53,33 @@ public class ProductRepository : IProductRepository
         }
     }
 
+    public async Task<List<Product>> GetProductByListOfId(List<int> productIds)
+    {
+        try
+        {
+            return await _context.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task UpdateProductQuantity(List<Product> products)
+    {
+        try
+        {
+            _context.Products.UpdateRange(products);
+            await _context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
     public async Task<bool> CheckIfProductNameExists(string name)
     {
         try

@@ -24,5 +24,5 @@ public class Product
     [Required]
     public bool IsDeleted { get; set; } = false;
 
-    public ICollection<Order> Orders { get; set; } = [];
+    public ICollection<OrderProduct> Orders { get; set; } = new List <OrderProduct>();
 }

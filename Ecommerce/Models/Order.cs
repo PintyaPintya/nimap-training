@@ -22,8 +22,7 @@ public class Order
     public string Status { get; set; } = "Pending";
 
     [Required]
-    [DataType(DataType.Date)]
-    public DateTime OrderDate { get; set; }
+    public DateOnly OrderDate { get; set; }
 
-    public ICollection<Product> Products { get; set; } = [];
+    public ICollection<OrderProduct> Products { get; set; } = new List<OrderProduct>();
 }

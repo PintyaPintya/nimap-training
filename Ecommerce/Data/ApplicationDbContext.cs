@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
-    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<OrderProduct> OrderProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,8 +31,8 @@ public class ApplicationDbContext : DbContext
 
         // Seed data for Orders
         modelBuilder.Entity<Order>().HasData(
-            new Order { Id = 1, CustomerId = 1, TotalAmount = 1499.97m, Status = "Completed", OrderDate = new DateTime(2024, 1, 15) },
-            new Order { Id = 2, CustomerId = 2, TotalAmount = 999.99m, Status = "Pending", OrderDate = new DateTime(2024, 2, 10) }
+            new Order { Id = 1, CustomerId = 1, TotalAmount = 1499.97m, Status = "Completed", OrderDate = new DateOnly(2024, 1, 15) },
+            new Order { Id = 2, CustomerId = 2, TotalAmount = 999.99m, Status = "Pending", OrderDate = new DateOnly(2024, 2, 10) }
         );
     }
 }
