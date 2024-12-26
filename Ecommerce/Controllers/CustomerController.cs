@@ -1,12 +1,14 @@
 using Ecommerce.IRepository;
 using Ecommerce.Models;
 using Ecommerce.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize(Roles = "Admin")]
 public class CustomerController : ControllerBase
 {
     private readonly ICustomerRepository _customerRepository;
@@ -29,6 +31,8 @@ public class CustomerController : ControllerBase
             {
                 var customerDto = new CustomerDto()
                 {
+                    Username = customer.Username,
+                    Role = customer.Role,
                     Name = customer.Name,
                     Email = customer.Email,
                     Address = customer.Address
@@ -58,6 +62,8 @@ public class CustomerController : ControllerBase
             {
                 var customerDto = new CustomerDto()
                 {
+                    Username = customer.Username,
+                    Role = customer.Role,
                     Name = customer.Name,
                     Email = customer.Email,
                     Address = customer.Address
@@ -82,6 +88,8 @@ public class CustomerController : ControllerBase
 
             var customerDto = new CustomerDto()
             {
+                Username = customer.Username,
+                Role = customer.Role,
                 Name = customer.Name,
                 Email = customer.Email,
                 Address = customer.Address
@@ -100,11 +108,13 @@ public class CustomerController : ControllerBase
     {
         try
         {
-            bool customerExists = await _customerRepository.CheckIfCustomerExists(customerDto.Name);
+            bool customerExists = await _customerRepository.CheckIfCustomerExists(customerDto.Username);
             if (customerExists) return BadRequest("Customer already exists");
 
             var customer = new Customer()
             {
+                Username = customerDto.Username,
+                Role = customerDto.Role,
                 Name = customerDto.Name,
                 Email = customerDto.Email,
                 Address = customerDto.Address,
@@ -126,12 +136,12 @@ public class CustomerController : ControllerBase
         try
         {
             var customer = await _customerRepository.GetCustomerById(id);
-            if(customer == null) return NotFound($"Customer not found with ID: {id}");
+            if (customer == null) return NotFound($"Customer not found with ID: {id}");
 
-            if(!string.Equals(editCustomerDto.Name, customer.Name, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(editCustomerDto.Name, customer.Name, StringComparison.OrdinalIgnoreCase))
             {
                 bool customerExists = await _customerRepository.CheckIfCustomerExists(editCustomerDto.Name);
-                if(customerExists) return BadRequest("Customer with this name already exists");
+                if (customerExists) return BadRequest("Customer with this name already exists");
             }
 
             customer.Name = editCustomerDto.Name;
@@ -142,9 +152,9 @@ public class CustomerController : ControllerBase
             await _customerRepository.EditCustomer(customer);
             return Ok(editCustomerDto);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            return StatusCode(500, new {Message = "An error occured while editing customer", Details = ex.Message});
+            return StatusCode(500, new { Message = "An error occured while editing customer", Details = ex.Message });
         }
     }
 
@@ -154,16 +164,16 @@ public class CustomerController : ControllerBase
         try
         {
             var customer = await _customerRepository.GetCustomerById(id);
-            if(customer == null) return NotFound($"Customer not found with ID: {id}");
+            if (customer == null) return NotFound($"Customer not found with ID: {id}");
 
             customer.IsDeleted = true;
 
             await _customerRepository.EditCustomer(customer);
             return NoContent();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            return StatusCode(500, new {Message = "An error occured while deleting customer", Details = ex.Message});
+            return StatusCode(500, new { Message = "An error occured while deleting customer", Details = ex.Message });
         }
     }
 }

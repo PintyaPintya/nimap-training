@@ -1,12 +1,14 @@
 using Ecommerce.IRepository;
 using Ecommerce.Models;
 using Ecommerce.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProductController : ControllerBase
 {
     private readonly IProductRepository _productRepository;
@@ -17,6 +19,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("/api/products")]
+    [AllowAnonymous]
     public async Task<ActionResult<List<ProductDto>>> GetAllActiveProducts()
     {
         try
@@ -46,6 +49,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("/api/disabled-products")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<ProductDto>>> GetAllDisabledProducts()
     {
         try
@@ -98,6 +102,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> AddProduct(CreateProductDto createProductDto)
     {
         try

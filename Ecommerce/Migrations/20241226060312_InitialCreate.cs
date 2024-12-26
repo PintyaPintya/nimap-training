@@ -19,7 +19,9 @@ namespace Ecommerce.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
@@ -121,11 +123,11 @@ namespace Ecommerce.Migrations
 
             migrationBuilder.InsertData(
                 table: "Customers",
-                columns: new[] { "Id", "Address", "Email", "IsDeleted", "Name" },
+                columns: new[] { "Id", "Address", "Email", "IsDeleted", "Name", "Role", "Username" },
                 values: new object[,]
                 {
-                    { 1, "123 Main St", "john.doe@example.com", false, "John Doe" },
-                    { 2, "456 Elm St", "jane.smith@example.com", false, "Jane Smith" }
+                    { 1, "123 Main St", "john.doe@example.com", false, "John Doe", "Admin", "johndoe" },
+                    { 2, "456 Elm St", "jane.smith@example.com", false, "Jane Smith", "Customer", "janesmith" }
                 });
 
             migrationBuilder.InsertData(

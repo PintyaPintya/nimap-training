@@ -8,7 +8,12 @@ public class Customer
     public int Id { get; set; }
 
     [Required]
-    public required string Name { get; set; }
+    public required string Username { get; set; }
+
+    [Required]
+    public required string Role { get; set; }
+
+    public string? Name { get; set; }
 
     [Required]
     [EmailAddress(ErrorMessage = "Invalid Email address")]

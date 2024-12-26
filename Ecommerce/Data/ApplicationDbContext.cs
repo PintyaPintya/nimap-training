@@ -18,8 +18,8 @@ public class ApplicationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<Customer>().HasData(
-            new Customer { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Address = "123 Main St", IsDeleted = false },
-            new Customer { Id = 2, Name = "Jane Smith", Email = "jane.smith@example.com", Address = "456 Elm St", IsDeleted = false }
+            new Customer { Id = 1, Username = "johndoe", Role = "Admin", Name = "John Doe", Email = "john.doe@example.com", Address = "123 Main St", IsDeleted = false },
+            new Customer { Id = 2, Username = "janesmith", Role = "Customer", Name = "Jane Smith", Email = "jane.smith@example.com", Address = "456 Elm St", IsDeleted = false }
         );
 
         // Seed data for Products

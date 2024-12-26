@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241226051525_InitialCreate")]
+    [Migration("20241226060312_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -45,6 +45,13 @@ namespace Ecommerce.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -59,7 +66,9 @@ namespace Ecommerce.Migrations
                             Address = "123 Main St",
                             Email = "john.doe@example.com",
                             IsDeleted = false,
-                            Name = "John Doe"
+                            Name = "John Doe",
+                            Role = "Admin",
+                            Username = "johndoe"
                         },
                         new
                         {
@@ -67,7 +76,9 @@ namespace Ecommerce.Migrations
                             Address = "456 Elm St",
                             Email = "jane.smith@example.com",
                             IsDeleted = false,
-                            Name = "Jane Smith"
+                            Name = "Jane Smith",
+                            Role = "Customer",
+                            Username = "janesmith"
                         });
                 });
 

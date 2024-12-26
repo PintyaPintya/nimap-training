@@ -54,12 +54,12 @@ public class CustomerRepository : ICustomerRepository
         }
     }
 
-    public async Task<bool> CheckIfCustomerExists(string name)
+    public async Task<bool> CheckIfCustomerExists(string username)
     {
         try
         {
             return await _context.Customers
-                .AnyAsync(c => c.Name.ToLower() == name.ToLower());
+                .AnyAsync(c => string.Equals(c.Username, username, StringComparison.OrdinalIgnoreCase));
         }
         catch(Exception ex)
         {

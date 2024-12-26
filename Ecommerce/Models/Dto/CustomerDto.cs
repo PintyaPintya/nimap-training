@@ -5,7 +5,11 @@ namespace Ecommerce.Models.Dto;
 public class CustomerDto
 {
     [Required]
-    public required string Name { get; set; }
+    public required string Username { get; set; }
+
+    [Required]
+    public required string Role { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     [EmailAddress]
