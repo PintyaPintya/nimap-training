@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241226111700_InitialCreate")]
+    [Migration("20241227042149_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -93,6 +93,9 @@ namespace Ecommerce.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateOnly>("OrderDate")
                         .HasColumnType("date");
 
@@ -108,24 +111,6 @@ namespace Ecommerce.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CustomerId = 1,
-                            OrderDate = new DateOnly(2024, 1, 15),
-                            Status = "Completed",
-                            TotalAmount = 1499.97m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CustomerId = 2,
-                            OrderDate = new DateOnly(2024, 2, 10),
-                            Status = "Pending",
-                            TotalAmount = 999.99m
-                        });
                 });
 
             modelBuilder.Entity("Ecommerce.Models.OrderProduct", b =>
@@ -190,7 +175,7 @@ namespace Ecommerce.Migrations
                             IsDeleted = false,
                             Name = "TV",
                             Price = 499.99m,
-                            Quantity = 50
+                            Quantity = 3
                         },
                         new
                         {
@@ -199,7 +184,7 @@ namespace Ecommerce.Migrations
                             IsDeleted = false,
                             Name = "Laptop",
                             Price = 999.99m,
-                            Quantity = 30
+                            Quantity = 3
                         },
                         new
                         {
@@ -208,7 +193,7 @@ namespace Ecommerce.Migrations
                             IsDeleted = false,
                             Name = "Smartphone",
                             Price = 799.99m,
-                            Quantity = 100
+                            Quantity = 1
                         });
                 });
 

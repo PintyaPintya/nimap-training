@@ -24,5 +24,7 @@ public class Order
     [Required]
     public DateOnly OrderDate { get; set; }
 
+    public bool IsDeleted {get;set;} = false;
+
     public ICollection<OrderProduct> Products { get; set; } = new List<OrderProduct>();
 }

@@ -57,7 +57,8 @@ namespace Ecommerce.Migrations
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(16,2)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDate = table.Column<DateOnly>(type: "date", nullable: false)
+                    OrderDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -111,18 +112,9 @@ namespace Ecommerce.Migrations
                 columns: new[] { "Id", "Description", "IsDeleted", "Name", "Price", "Quantity" },
                 values: new object[,]
                 {
-                    { 1, "4K Ultra HD TV", false, "TV", 499.99m, 50 },
-                    { 2, "High-performance laptop", false, "Laptop", 999.99m, 30 },
-                    { 3, "Latest model smartphone", false, "Smartphone", 799.99m, 100 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Orders",
-                columns: new[] { "Id", "CustomerId", "OrderDate", "Status", "TotalAmount" },
-                values: new object[,]
-                {
-                    { 1, 1, new DateOnly(2024, 1, 15), "Completed", 1499.97m },
-                    { 2, 2, new DateOnly(2024, 2, 10), "Pending", 999.99m }
+                    { 1, "4K Ultra HD TV", false, "TV", 499.99m, 3 },
+                    { 2, "High-performance laptop", false, "Laptop", 999.99m, 3 },
+                    { 3, "Latest model smartphone", false, "Smartphone", 799.99m, 1 }
                 });
 
             migrationBuilder.CreateIndex(
