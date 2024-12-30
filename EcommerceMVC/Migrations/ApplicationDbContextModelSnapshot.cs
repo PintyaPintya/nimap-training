@@ -141,6 +141,53 @@ namespace EcommerceMVC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Latest iPhone with A16 Bionic chip",
+                            IsDeleted = false,
+                            Name = "iPhone",
+                            Price = 999.99m,
+                            Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Flagship Samsung phone with high-end specs",
+                            IsDeleted = false,
+                            Name = "Galaxy S23",
+                            Price = 899.99m,
+                            Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Noise-canceling wireless headphones",
+                            IsDeleted = false,
+                            Name = "Sony Headphones",
+                            Price = 349.99m,
+                            Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Compact and powerful ultrabook for professionals",
+                            IsDeleted = false,
+                            Name = "Dell Laptop",
+                            Price = 1199.99m,
+                            Quantity = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Portable Bluetooth speaker with 360-degree sound",
+                            IsDeleted = false,
+                            Name = "Bose Speaker",
+                            Price = 349.00m,
+                            Quantity = 3
+                        });
                 });
 
             modelBuilder.Entity("EcommerceMVC.Models.Order", b =>

@@ -1,0 +1,10 @@
+@model CreateProductDto
+
+@{
+    TempData["Title"] = @Model.Name;
+}
+
+<h2>@Model.Name</h2>
+<h4>@Model.Price</h4>
+<h4>@Model.Quantity</h4>
+<p>@Model.Description</p>
