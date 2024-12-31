@@ -1,67 +1,24 @@
 using EcommerceMVC.Data;
 using EcommerceMVC.IRepository;
 using EcommerceMVC.Models;
-using EcommerceMVC.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceMVC.Repository;
 
-public class ProductRepository : IProductRepository
+public class CustomerRepository : ICustomerRepository
 {
     private readonly ApplicationDbContext _context;
-    public ProductRepository(ApplicationDbContext context)
+    public CustomerRepository(ApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<List<Product>> GetAllActiveProducts()
+    public async Task<List<Customer>> GetAllActiveCustomers()
     {
         try
         {
-            return await _context.Products
-                .Where(p => !p.IsDeleted).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            var innerExceptionMessage = ex.InnerException?.Message;
-            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
-        }
-    }
-
-    public async Task<List<Product>> GetAllDisabledProducts()
-    {
-        try
-        {
-            return await _context.Products
-                .Where(p => p.IsDeleted).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            var innerExceptionMessage = ex.InnerException?.Message;
-            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
-        }
-    }
-
-    public async Task<bool> CheckIfProductExists(string name)
-    {
-        try
-        {
-            return await _context.Products
-                .AnyAsync(p => p.Name.ToLower() == name.ToLower());
-        }
-        catch (Exception ex)
-        {
-            var innerExceptionMessage = ex.InnerException?.Message;
-            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
-        }
-    }
-
-    public async Task<Product?> GetProductById(int id)
-    {
-        try
-        {
-            return await _context.Products
-                .FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Customers
+                .Where(c => !c.IsDeleted).ToListAsync();
         }
         catch(Exception ex)
         {
@@ -70,26 +27,67 @@ public class ProductRepository : IProductRepository
         }
     }
 
-    public async Task AddProduct(Product product)
+    public async Task<Customer?> GetCustomerById(int id)
     {
         try
         {
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            return await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
         }
-        catch (Exception ex)
+        catch(Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
         }
     }
 
-    public async Task UpdateProduct(Product product)
+    public async Task<bool> CheckIfCustomerExists(string username)
     {
         try
         {
-            _context.Products.Update(product);
+            return await _context.Customers
+                .AnyAsync(p => p.Username.ToLower() == username.ToLower());
+        }
+        catch(Exception ex)
+        {
+            var innerExceptionMessage = ex.InnerException?.Message;
+            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
+        }
+    }
+
+    public async Task AddCustomer(Customer customer)
+    {
+        try
+        {
+            await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            var innerExceptionMessage = ex.InnerException?.Message;
+            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
+        }
+    }
+
+    public async Task UpdateCustomer(Customer customer)
+    {
+        try
+        {
+            _context.Customers.Update(customer);
+            await _context.SaveChangesAsync();
+        }
+        catch(Exception ex)
+        {
+            var innerExceptionMessage = ex.InnerException?.Message;
+            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
+        }
+    }
+
+    public async Task<List<Customer>> GetAllDisabledCustomers()
+    {
+        try
+        {
+            return await _context.Customers
+                .Where(c => c.IsDeleted).ToListAsync();
         }
         catch (Exception ex)
         {

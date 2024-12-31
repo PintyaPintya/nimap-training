@@ -1,0 +1,12 @@
+@model CustomerDto
+
+@{
+    TempData["Title"] = @Model.Username;
+}
+
+
+<p>@Model.Username</p>
+<p>@Model.Name</p>
+<p>@Model.Role</p>
+<p>@Model.Email</p>
+<p>@Model.Address</p>

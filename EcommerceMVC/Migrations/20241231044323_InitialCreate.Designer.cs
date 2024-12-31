@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241230090333_InitialCreate")]
+    [Migration("20241231044323_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -58,6 +58,28 @@ namespace EcommerceMVC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "123 Main St, Springfield, IL",
+                            Email = "john.doe@example.com",
+                            IsDeleted = false,
+                            Name = "John Doe",
+                            Role = "Admin",
+                            Username = "johndoe"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "456 Elm St, Springfield, IL",
+                            Email = "jane.doe@example.com",
+                            IsDeleted = false,
+                            Name = "Jane Doe",
+                            Role = "Customer",
+                            Username = "janedoe"
+                        });
                 });
 
             modelBuilder.Entity("EcommerceMVC.Models.Order", b =>

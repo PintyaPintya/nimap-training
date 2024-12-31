@@ -1,30 +1,20 @@
 using System.ComponentModel.DataAnnotations;
-using EcommerceMVC.Models;
 
-namespace EcommerceMVC.Models;
+namespace EcommerceMVC.Models.Dto;
 
-public class Customer
+public class CustomerDto
 {
-    [Key]
-    public int Id { get; set; }
-
-    [Required]
+    [Required(ErrorMessage = "Username is required.")]
     public required string Username { get; set; }
-
 
     public string? Role { get; set; }
 
     public string? Name { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Email is required.")]
     [EmailAddress(ErrorMessage = "Invalid Email address")]
     public required string Email { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Address is required.")]
     public required string Address { get; set; }
-
-    [Required]
-    public bool IsDeleted { get; set; } = false;
-
-    public ICollection<Order> Orders { get; set; } = [];
 }

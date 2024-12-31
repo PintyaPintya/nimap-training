@@ -64,5 +64,28 @@ public class ApplicationDbContext : DbContext
                     IsDeleted = false
                 }
         );
+
+        modelBuilder.Entity<Customer>().HasData(
+            new Customer
+            {
+                Id = 1,
+                Username = "johndoe",
+                Role = "Admin",
+                Name = "John Doe",
+                Email = "john.doe@example.com",
+                Address = "123 Main St, Springfield, IL",
+                IsDeleted = false
+            },
+            new Customer
+            {
+                Id = 2,
+                Username = "janedoe",
+                Role = "Customer",
+                Name = "Jane Doe",
+                Email = "jane.doe@example.com",
+                Address = "456 Elm St, Springfield, IL",
+                IsDeleted = false
+            }
+        );
     }
 }

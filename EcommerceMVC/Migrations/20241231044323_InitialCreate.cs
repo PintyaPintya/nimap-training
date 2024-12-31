@@ -99,6 +99,15 @@ namespace EcommerceMVC.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Customers",
+                columns: new[] { "Id", "Address", "Email", "IsDeleted", "Name", "Role", "Username" },
+                values: new object[,]
+                {
+                    { 1, "123 Main St, Springfield, IL", "john.doe@example.com", false, "John Doe", "Admin", "johndoe" },
+                    { 2, "456 Elm St, Springfield, IL", "jane.doe@example.com", false, "Jane Doe", "Customer", "janedoe" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Products",
                 columns: new[] { "Id", "Description", "IsDeleted", "Name", "Price", "Quantity" },
                 values: new object[,]
