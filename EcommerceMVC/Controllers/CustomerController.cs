@@ -1,9 +1,7 @@
 using EcommerceMVC.IRepository;
 using EcommerceMVC.Models;
 using EcommerceMVC.Models.Dto;
-using EcommerceMVC.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace EcommerceMVC.Controllers;
 

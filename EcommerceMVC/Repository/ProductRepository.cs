@@ -1,7 +1,6 @@
 using EcommerceMVC.Data;
 using EcommerceMVC.IRepository;
 using EcommerceMVC.Models;
-using EcommerceMVC.Models.Dto;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceMVC.Repository;
@@ -63,7 +62,7 @@ public class ProductRepository : IProductRepository
             return await _context.Products
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");

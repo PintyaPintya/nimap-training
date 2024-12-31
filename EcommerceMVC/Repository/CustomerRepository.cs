@@ -20,7 +20,7 @@ public class CustomerRepository : ICustomerRepository
             return await _context.Customers
                 .Where(c => !c.IsDeleted).ToListAsync();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
@@ -33,7 +33,7 @@ public class CustomerRepository : ICustomerRepository
         {
             return await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
@@ -47,7 +47,7 @@ public class CustomerRepository : ICustomerRepository
             return await _context.Customers
                 .AnyAsync(p => p.Username.ToLower() == username.ToLower());
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
@@ -61,7 +61,7 @@ public class CustomerRepository : ICustomerRepository
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
@@ -75,7 +75,7 @@ public class CustomerRepository : ICustomerRepository
             _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var innerExceptionMessage = ex.InnerException?.Message;
             throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");

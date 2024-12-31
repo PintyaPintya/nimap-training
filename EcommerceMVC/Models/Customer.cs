@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using EcommerceMVC.Models;
 
 namespace EcommerceMVC.Models;
 

@@ -15,7 +15,7 @@ public class Order
 
     [Required]
     [Column(TypeName = "decimal(16,2)")]
-    [Range(0,double.MaxValue)]
+    [Range(0, double.MaxValue)]
     public decimal TotalAmount { get; set; }
 
     [Required]
@@ -24,7 +24,7 @@ public class Order
     [Required]
     public DateOnly OrderDate { get; set; }
 
-    public bool IsDeleted {get;set;} = false;
+    public bool IsDeleted { get; set; } = false;
 
     public ICollection<OrderProduct> Products { get; set; } = new List<OrderProduct>();
 }
