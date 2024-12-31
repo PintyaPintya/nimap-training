@@ -1,13 +1,10 @@
-@model ICollection<Product>
+﻿@model ICollection<Product>
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "Disabled Products";
 }
 
-<h2>Products</h2>
-
-<a href=@Url.Action("Create") class="btn btn-primary">Add new</a>
-<a href=@Url.Action("DisabledProducts") class="btn btn-secondary">Disabled Products</a>
+<h2>Disabled Products</h2>
 
 @if (@Model.Count > 0)
 {
@@ -32,8 +29,7 @@
                     <td>@product.Quantity</td>
                     <td>@product.Description</td>
                     <td>
-                        <a href=@Url.Action("Edit", new {id = product.Id}) class="btn btn-sm btn-secondary">Edit</a>
-                        <a href=@Url.Action("Delete", new {id = product.Id}) class="btn btn-sm btn-danger">Delete</a>
+                        <a href=@Url.Action("RestoreProduct", new {id = product.Id}) class="btn btn-sm btn-success">Restore</a>
                     </td>
                 </tr>
             }

@@ -27,6 +27,19 @@ public class ProductRepository : IProductRepository
         }
     }
 
+    public async Task<List<Product>> GetAllDisabledProducts()
+    {
+        try
+        {
+            return await _context.Products
+                .Where(p => p.IsDeleted).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
     public async Task<bool> CheckIfProductExists(string name)
     {
         try
@@ -75,7 +88,8 @@ public class ProductRepository : IProductRepository
         }
         catch (Exception ex)
         {
-            throw new Exception(ex.Message);
+            var innerExceptionMessage = ex.InnerException?.Message;
+            throw new Exception($"Error: {ex.Message}. Inner Exception: {innerExceptionMessage}");
         }
     }
 }

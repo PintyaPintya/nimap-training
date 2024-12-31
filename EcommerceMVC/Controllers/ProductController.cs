@@ -26,6 +26,19 @@ public class ProductController : Controller
         return View(products);
     }
 
+    [HttpGet("/disabled-products")]
+    public async Task<IActionResult> DisabledProducts()
+    {
+        var products = await _productRepository.GetAllDisabledProducts();
+
+        if (products == null)
+        {
+            products = [];
+        }
+
+        return View("Disabled", products);
+    }
+
     [HttpGet("/product/{id:int}")]
     public async Task<IActionResult> GetProductById(int id)
     {
@@ -86,7 +99,7 @@ public class ProductController : Controller
         return View(product);
     }
 
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> Edit(Product product)
     {
         if (ModelState.IsValid)
@@ -104,12 +117,43 @@ public class ProductController : Controller
                 }
             }
 
-            await _productRepository.UpdateProduct(product);
+            productFromDb.Quantity = product.Quantity;
+            productFromDb.Description = product.Description;
+            productFromDb.Name = product.Name;
+            productFromDb.Price = product.Price;
+
+            await _productRepository.UpdateProduct(productFromDb);
             return RedirectToAction("Index");
         }
         else
         {
             return View(product);
         }
+    }
+
+    public async Task<IActionResult> Delete(int id)
+    {
+        var product = await _productRepository.GetProductById(id);
+        if (product == null) return NotFound();
+
+        return View(product);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Delete(Product product)
+    {
+        product.IsDeleted = true;
+        await _productRepository.UpdateProduct(product);
+        return RedirectToAction("Index");
+    }
+
+    public async Task<IActionResult> RestoreProduct(int id)
+    {
+        var product = await _productRepository.GetProductById(id);
+        if (product == null) return NotFound();
+
+        product.IsDeleted = false;
+        await _productRepository.UpdateProduct(product);
+        return RedirectToAction("Index");
     }
 }

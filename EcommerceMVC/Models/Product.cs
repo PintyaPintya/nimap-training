@@ -17,6 +17,7 @@ public class Product
     public required decimal Price { get; set; }
 
     [Required]
+    [Range(1, double.MaxValue, ErrorMessage = "Quantity cannot be less than zero")]
     public required int Quantity { get; set; }
 
     public string? Description { get; set; }
