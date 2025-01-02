@@ -18,13 +18,12 @@ public class Order
     [Range(0, double.MaxValue)]
     public decimal TotalAmount { get; set; }
 
-    [Required]
     public string Status { get; set; } = "Pending";
 
-    [Required]
     public DateOnly OrderDate { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 
+    [Required]
     public ICollection<OrderProduct> Products { get; set; } = new List<OrderProduct>();
 }

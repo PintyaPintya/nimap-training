@@ -1,0 +1,28 @@
+@model OrderDto 
+
+@{
+    ViewData["Title"] = "Add Order";
+}
+
+<h2>Add Customer</h2>
+
+@using (Html.BeginForm("Create", "Order"))
+{
+    <div class="form-control">
+        @Html.LabelFor(m => m.CustomerId)
+        @Html.TextBoxFor(m => m.CustomerId, new { @class = "form-control", type = "number", @required = "required"  })
+        @Html.ValidationMessageFor(m => m.CustomerId, "", new { @class = "text-danger" })
+
+        @Html.LabelFor(m => m.Products)
+        @Html.DropDownListFor(m => m.Products, (SelectList)ViewBag.Products, "Select a product")
+        @Html.ValidationMessageFor(m => m.Products, "", new { @class = "text-danger" })
+
+        <button type="submit" class="btn btn-primary">Save Customer</button>
+    </div>
+}
+
+<div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</div>
+
+<a href=@Url.Action("Index") class="btn btn-secondary">Back to list</a>

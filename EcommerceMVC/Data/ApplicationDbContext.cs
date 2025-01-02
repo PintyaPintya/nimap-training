@@ -17,75 +17,27 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Customer>().HasData(
+                new Customer { Id = 1, Username = "john_doe", Email = "john.doe@example.com", Address = "123 Main St", IsDeleted = false },
+                new Customer { Id = 2, Username = "jane_doe", Email = "jane.doe@example.com", Address = "456 Elm St", IsDeleted = false }
+            );
+
         modelBuilder.Entity<Product>().HasData(
-            new Product
-            {
-                Id = 1,
-                Name = "iPhone",
-                Price = 999.99m,
-                Quantity = 3,
-                Description = "Latest iPhone with A16 Bionic chip",
-                IsDeleted = false
-            },
-                new Product
-                {
-                    Id = 2,
-                    Name = "Galaxy S23",
-                    Price = 899.99m,
-                    Quantity = 3,
-                    Description = "Flagship Samsung phone with high-end specs",
-                    IsDeleted = false
-                },
-                new Product
-                {
-                    Id = 3,
-                    Name = "Sony Headphones",
-                    Price = 349.99m,
-                    Quantity = 3,
-                    Description = "Noise-canceling wireless headphones",
-                    IsDeleted = false
-                },
-                new Product
-                {
-                    Id = 4,
-                    Name = "Dell Laptop",
-                    Price = 1199.99m,
-                    Quantity = 3,
-                    Description = "Compact and powerful ultrabook for professionals",
-                    IsDeleted = false
-                },
-                new Product
-                {
-                    Id = 5,
-                    Name = "Bose Speaker",
-                    Price = 349.00m,
-                    Quantity = 3,
-                    Description = "Portable Bluetooth speaker with 360-degree sound",
-                    IsDeleted = false
-                }
+            new Product { Id = 1, Name = "Laptop", Price = 999.99m, Quantity = 3, Description = "High-performance laptop", IsDeleted = false },
+            new Product { Id = 2, Name = "Smartphone", Price = 499.99m, Quantity = 3, Description = "Latest model smartphone", IsDeleted = false },
+            new Product { Id = 3, Name = "Headphones", Price = 199.99m, Quantity = 3, Description = "Noise-canceling headphones", IsDeleted = false }
         );
 
-        modelBuilder.Entity<Customer>().HasData(
-            new Customer
-            {
-                Id = 1,
-                Username = "johndoe",
-                Role = "Admin",
-                Name = "John Doe",
-                Email = "john.doe@example.com",
-                Address = "123 Main St, Springfield, IL",
-                IsDeleted = false
-            },
-            new Customer
-            {
-                Id = 2,
-                Username = "janedoe",
-                Role = "Customer",
-                Name = "Jane Doe",
-                Email = "jane.doe@example.com",
-                Address = "456 Elm St, Springfield, IL",
-                IsDeleted = false
-            }
+        modelBuilder.Entity<Order>().HasData(
+            new Order { Id = 1, CustomerId = 1, TotalAmount = 1499.98m, Status = "Pending", OrderDate = DateOnly.FromDateTime(DateTime.Now), IsDeleted = false },
+            new Order { Id = 2, CustomerId = 2, TotalAmount = 699.98m, Status = "Completed", OrderDate = DateOnly.FromDateTime(DateTime.Now), IsDeleted = false }
+        );
+
+        modelBuilder.Entity<OrderProduct>().HasData(
+            new OrderProduct { Id = 1, OrderId = 1, ProductId = 1, Quantity = 1 },
+            new OrderProduct { Id = 2, OrderId = 1, ProductId = 2, Quantity = 1 },
+            new OrderProduct { Id = 3, OrderId = 2, ProductId = 2, Quantity = 1 },
+            new OrderProduct { Id = 4, OrderId = 2, ProductId = 3, Quantity = 1 }
         );
     }
 }

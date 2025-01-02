@@ -1,0 +1,56 @@
+@model List<DisplayOrderDto>
+
+@{
+    ViewData["Title"] = "Pending orders";
+}
+
+<h2>Pending Orders</h2>
+
+<a href=@Url.Action("Create") class="btn btn-primary">Add new</a>
+<a href=@Url.Action("CompletedOrders") class="btn btn-secondary">Completed Orders</a>
+<a href=@Url.Action("DisabledCustomers") class="btn btn-secondary">Deleted Orders</a>
+
+@if (@Model.Count > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th>Products</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in @Model)
+            {
+                <tr>
+                    <td>@order.Order.Id</td>
+                    @if (order.Order.Customer != null)
+                    {
+                        <td>@order.Order.Customer.Username</td>
+                    }
+                    else
+                    {
+                        <td>@order.Order.CustomerId</td>
+                    }
+                    <td>@order.Order.TotalAmount</td>
+                    <td>@order.Order.OrderDate</td>
+                    <td>
+                        @string.Join(", ", order.ProductNames)
+                    </td>
+                    <td>
+                        <a href=@Url.Action("Edit", new {id = order.Order.Id}) class="btn btn-sm btn-secondary">Edit</a>
+                        <a href=@Url.Action("Delete", new {id = order.Order.Id}) class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No Pending orders</p>
+}

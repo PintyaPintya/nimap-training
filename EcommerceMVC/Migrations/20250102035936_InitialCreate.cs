@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -19,7 +20,7 @@ namespace EcommerceMVC.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -102,8 +103,8 @@ namespace EcommerceMVC.Migrations
                 columns: new[] { "Id", "Address", "Email", "IsDeleted", "Name", "Role", "Username" },
                 values: new object[,]
                 {
-                    { 1, "123 Main St, Springfield, IL", "john.doe@example.com", false, "John Doe", "Admin", "johndoe" },
-                    { 2, "456 Elm St, Springfield, IL", "jane.doe@example.com", false, "Jane Doe", "Customer", "janedoe" }
+                    { 1, "123 Main St", "john.doe@example.com", false, null, null, "john_doe" },
+                    { 2, "456 Elm St", "jane.doe@example.com", false, null, null, "jane_doe" }
                 });
 
             migrationBuilder.InsertData(
@@ -111,11 +112,29 @@ namespace EcommerceMVC.Migrations
                 columns: new[] { "Id", "Description", "IsDeleted", "Name", "Price", "Quantity" },
                 values: new object[,]
                 {
-                    { 1, "Latest iPhone with A16 Bionic chip", false, "iPhone", 999.99m, 3 },
-                    { 2, "Flagship Samsung phone with high-end specs", false, "Galaxy S23", 899.99m, 3 },
-                    { 3, "Noise-canceling wireless headphones", false, "Sony Headphones", 349.99m, 3 },
-                    { 4, "Compact and powerful ultrabook for professionals", false, "Dell Laptop", 1199.99m, 3 },
-                    { 5, "Portable Bluetooth speaker with 360-degree sound", false, "Bose Speaker", 349.00m, 3 }
+                    { 1, "High-performance laptop", false, "Laptop", 999.99m, 3 },
+                    { 2, "Latest model smartphone", false, "Smartphone", 499.99m, 3 },
+                    { 3, "Noise-canceling headphones", false, "Headphones", 199.99m, 3 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "CustomerId", "IsDeleted", "OrderDate", "Status", "TotalAmount" },
+                values: new object[,]
+                {
+                    { 1, 1, false, new DateOnly(2025, 1, 2), "Pending", 1499.98m },
+                    { 2, 2, false, new DateOnly(2025, 1, 2), "Completed", 699.98m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "OrderProducts",
+                columns: new[] { "Id", "OrderId", "ProductId", "Quantity" },
+                values: new object[,]
+                {
+                    { 1, 1, 1, 1 },
+                    { 2, 1, 2, 1 },
+                    { 3, 2, 2, 1 },
+                    { 4, 2, 3, 1 }
                 });
 
             migrationBuilder.CreateIndex(

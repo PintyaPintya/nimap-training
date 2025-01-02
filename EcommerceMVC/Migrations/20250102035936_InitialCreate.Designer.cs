@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241231044323_InitialCreate")]
+    [Migration("20250102035936_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -48,7 +48,6 @@ namespace EcommerceMVC.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
@@ -63,22 +62,18 @@ namespace EcommerceMVC.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "123 Main St, Springfield, IL",
+                            Address = "123 Main St",
                             Email = "john.doe@example.com",
                             IsDeleted = false,
-                            Name = "John Doe",
-                            Role = "Admin",
-                            Username = "johndoe"
+                            Username = "john_doe"
                         },
                         new
                         {
                             Id = 2,
-                            Address = "456 Elm St, Springfield, IL",
+                            Address = "456 Elm St",
                             Email = "jane.doe@example.com",
                             IsDeleted = false,
-                            Name = "Jane Doe",
-                            Role = "Customer",
-                            Username = "janedoe"
+                            Username = "jane_doe"
                         });
                 });
 
@@ -111,6 +106,26 @@ namespace EcommerceMVC.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            IsDeleted = false,
+                            OrderDate = new DateOnly(2025, 1, 2),
+                            Status = "Pending",
+                            TotalAmount = 1499.98m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            IsDeleted = false,
+                            OrderDate = new DateOnly(2025, 1, 2),
+                            Status = "Completed",
+                            TotalAmount = 699.98m
+                        });
                 });
 
             modelBuilder.Entity("EcommerceMVC.Models.OrderProduct", b =>
@@ -137,6 +152,36 @@ namespace EcommerceMVC.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("OrderProducts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            OrderId = 1,
+                            ProductId = 1,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            OrderId = 1,
+                            ProductId = 2,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            OrderId = 2,
+                            ProductId = 2,
+                            Quantity = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            OrderId = 2,
+                            ProductId = 3,
+                            Quantity = 1
+                        });
                 });
 
             modelBuilder.Entity("EcommerceMVC.Models.Product", b =>
@@ -171,46 +216,28 @@ namespace EcommerceMVC.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Latest iPhone with A16 Bionic chip",
+                            Description = "High-performance laptop",
                             IsDeleted = false,
-                            Name = "iPhone",
+                            Name = "Laptop",
                             Price = 999.99m,
                             Quantity = 3
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Flagship Samsung phone with high-end specs",
+                            Description = "Latest model smartphone",
                             IsDeleted = false,
-                            Name = "Galaxy S23",
-                            Price = 899.99m,
+                            Name = "Smartphone",
+                            Price = 499.99m,
                             Quantity = 3
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Noise-canceling wireless headphones",
+                            Description = "Noise-canceling headphones",
                             IsDeleted = false,
-                            Name = "Sony Headphones",
-                            Price = 349.99m,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Compact and powerful ultrabook for professionals",
-                            IsDeleted = false,
-                            Name = "Dell Laptop",
-                            Price = 1199.99m,
-                            Quantity = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Portable Bluetooth speaker with 360-degree sound",
-                            IsDeleted = false,
-                            Name = "Bose Speaker",
-                            Price = 349.00m,
+                            Name = "Headphones",
+                            Price = 199.99m,
                             Quantity = 3
                         });
                 });
