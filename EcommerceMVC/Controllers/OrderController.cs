@@ -1,6 +1,7 @@
 using EcommerceMVC.IRepository;
 using EcommerceMVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EcommerceMVC.Controllers;
 
@@ -46,12 +47,12 @@ public class OrderController : Controller
         }
     }
 
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         try
         {
-            var products = _productRepository.GetAllActiveProducts();
-            ViewBag.Products = products;
+            var products = await _productRepository.GetAllActiveProducts();
+            ViewBag.Products = new SelectList(products, "Id", "Name");
             return View();
         }
         catch (Exception ex)
