@@ -45,13 +45,16 @@ public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOption
         var username = credentials[0];
         var password = credentials[1];
 
-        var isValidUser = await _userRepository.ValidateUser(username, password);
-        if (!isValidUser)
+        var user = await _userRepository.ValidateUser(username, password);
+        if (user == null)
         {
             return AuthenticateResult.Fail("Authentication Failed");
         }
 
-        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, username) };
+        var claims = new[] { 
+            new Claim(ClaimTypes.NameIdentifier, username),
+            new Claim(ClaimTypes.Role, user.Role)
+        };
         var identity = new ClaimsIdentity(claims, "Basic");
         var claimsPrincipal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);

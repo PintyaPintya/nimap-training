@@ -1,3 +1,4 @@
+using BasicAuthentication.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,10 +14,12 @@ namespace BasicAuthentication.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IUserRepository _userRepository;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IUserRepository userRepository)
         {
             _logger = logger;
+            _userRepository = userRepository;
         }
 
         [Authorize]
@@ -30,6 +33,16 @@ namespace BasicAuthentication.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("/users")]
+        public async Task<ActionResult> GetAllUsers()
+        {
+            var users = await _userRepository.GetAllUsers();
+            if(users == null || users.Count == 0) return NotFound();
+
+            return Ok(users);
         }
     }
 }
