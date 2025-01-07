@@ -1,49 +1,61 @@
 ﻿using BasicAuthentication.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Encodings.Web;
 
-namespace BasicAuthentication
+public class BasicAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-    public class BasicAuthHandler
+    private readonly IUserRepository _userRepository;
+    public BasicAuthHandler(
+        IOptionsMonitor<AuthenticationSchemeOptions> options, 
+        ILoggerFactory logger, 
+        UrlEncoder encoder,
+        ISystemClock clock,
+        IUserRepository userRepository) :base(options, logger, encoder, clock)
+    { 
+        _userRepository = userRepository;  
+    }
+
+    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
     {
-        private readonly IUserRepository _userRepository;
-        public BasicAuthHandler(IUserRepository userRepository)
+        if (!Request.Headers.ContainsKey("Authorization"))
         {
-            _userRepository = userRepository;
+            return AuthenticateResult.Fail("Unauthorized, missing Authorization header");
         }
 
-        public async Task<ClaimsPrincipal?> Authenticate(HttpContext context)
+        string? authorizationHeader = Request.Headers["Authorization"];
+
+        if (string.IsNullOrEmpty(authorizationHeader) ||
+            !authorizationHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
         {
-            var authorizationHeader = context.Request.Headers["Authorization"].FirstOrDefault();
-            if (authorizationHeader == null || !authorizationHeader.StartsWith("Basic")) 
-            {
-                return null;
-            }
-            
-            var base64Credentials = authorizationHeader.Substring("Basic".Length).Trim();
-            var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(base64Credentials));
-
-            var parts = credentials.Split(':');
-            var username = parts[0];
-            var password = parts[1];
-
-            var user = await _userRepository.ValidateUser(username, password);
-            if(user == null)
-            {
-                return null;
-            }
-
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.NameIdentifier, password)
-            };
-
-            var identity = new ClaimsIdentity(claims);
-            var principal = new ClaimsPrincipal(identity);
-
-            return principal;
+            return AuthenticateResult.Fail("Unauthorized, Invalid Authorization header");
         }
+
+        var encodedCredentials = authorizationHeader.Substring("Basic ".Length);
+        var decodedCredentials = Encoding.UTF8.GetString(Convert.FromBase64String(encodedCredentials));
+
+        var credentials = decodedCredentials.Split(":");
+        if (credentials.Length != 2)
+        {
+            return AuthenticateResult.Fail("Unauthorized, Invalid credentials format");
+        }
+
+        var username = credentials[0];
+        var password = credentials[1];
+
+        var isValidUser = await _userRepository.ValidateUser(username, password);
+        if (!isValidUser)
+        {
+            return AuthenticateResult.Fail("Authentication Failed");
+        }
+
+        var claims = new[] { new Claim(ClaimTypes.NameIdentifier, username) };
+        var identity = new ClaimsIdentity(claims, "Basic");
+        var claimsPrincipal = new ClaimsPrincipal(identity);
+        var ticket = new AuthenticationTicket(claimsPrincipal, Scheme.Name);
+
+        return AuthenticateResult.Success(ticket);
     }
 }

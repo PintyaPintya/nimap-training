@@ -2,7 +2,7 @@
 {
     public interface IUserRepository
     {
-        Task<User?> ValidateUser(string username, string password);
+        Task<bool> ValidateUser(string username, string password);
         Task<List<User>> GetAllUsers();
     }
     public class UserRepository : IUserRepository
@@ -13,10 +13,10 @@
             new User { Id = 2, Username = "user", Password = "user" },
         };
 
-        public async Task<User?> ValidateUser(string username, string password)
+        public async Task<bool> ValidateUser(string username, string password)
         {
             await Task.Delay(100);
-            return users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            return users.Any(u => u.Username == username && u.Password == password);
         }
 
         public async Task<List<User>> GetAllUsers()
