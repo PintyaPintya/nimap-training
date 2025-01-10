@@ -1,0 +1,54 @@
+﻿@model User
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Welcome</h1>
+
+	<form action="/" method="post" id="form" class="form form-control">
+		<div>
+			<label asp-for="Name"></label>
+			<input asp-for="Name" id="Name" type="text" />
+			<span id="NameValidation" class="text-danger"></span>
+		</div>
+
+		<div>
+			<label asp-for="Password"></label>
+			<input asp-for="Password" id="Password" type="password" />
+			<span id="PasswordValidation" class="text-danger"></span>
+		</div>
+
+		<button id="button" class="btn btn-primary">Submit</button>
+	</form>
+
+
+</div>
+
+<script type="text/javascript">
+	document.getElementById("button").addEventListener("click", checkAndSubmit);
+
+	function checkAndSubmit(e)
+	{
+		e.preventDefault();
+		let isValid = true;
+		if(document.getElementById("Name").value == "")
+	{
+		isValid = false;
+		document.getElementById("NameValidation").innerText = "Name is required";
+	}
+
+	if(document.getElementById("Password").value == "")
+	{
+		isValid = false;
+		document.getElementById("PasswordValidation").innerText = "Password is required";
+	}
+	if(isValid)
+		{
+			document.getElementById("form").submit();
+		}
+
+	}
+
+</script>
