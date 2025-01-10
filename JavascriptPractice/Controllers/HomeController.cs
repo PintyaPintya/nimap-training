@@ -18,20 +18,6 @@ namespace JavascriptPractice.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ActionName("Index")]
-        public IActionResult IndexPost(string name, string password)
-        {
-            if (name == "admin" && password == "admin")
-            {
-                return View("Success");
-            }
-            else
-            {
-                return View("Fail");
-            }
-        }
-
         public IActionResult Privacy()
         {
             return View();
