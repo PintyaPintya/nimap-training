@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 </head>
 <body>
-    <button id="buttn">Click</button>
+    <h1>jQeury Id selector</h1>
+    <p>This is some text</p>
+    <p id="p1">This is some another text</p>
+    <button id="demo">click me</button>
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#buttn').click(function() {
-                alert("Hello")
+            $('#demo').click(function() {
+                $('#p1').css('border', '2px solid blue')
             })
         })
     </script>
