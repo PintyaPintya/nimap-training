@@ -18,12 +18,13 @@
             $('#demo').click(function() {
                 $.get("http://localhost:5245/api/products", function(data, status){
                     console.log("Data: " + data + "\nStatus: " + status);
+                    $('#list').empty();
                     data.forEach(d => {
                         var text = document.createElement('li');
                         text.innerHTML = d.name;
                         $('#list').append(text)
                     });
-                });
+                }, 'json');
             })
         })
     </script>
