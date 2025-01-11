@@ -4,18 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 <body>
     <h1>jQeury Id selector</h1>
     <p>This is some text</p>
     <p id="p1">This is some another text</p>
     <button id="demo">click me</button>
+    <ul id="list"></ul>
 
     <script type="text/javascript">
         $(document).ready(function(){
             $('#demo').click(function() {
-                $('#p1').css('border', '2px solid blue')
+                $.get("http://localhost:5245/api/products", function(data, status){
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    data.forEach(d => {
+                        var text = document.createElement('li');
+                        text.innerHTML = d.name;
+                        $('#list').append(text)
+                    });
+                });
             })
         })
     </script>

@@ -11,9 +11,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-    // .AddJsonOptions(options => {
-    //     options.JsonSerializerOptions.PropertyNamingPolicy = null;
-    // });
+// .AddJsonOptions(options => {
+//     options.JsonSerializerOptions.PropertyNamingPolicy = null;
+// });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin", policy =>
+    {
+        policy.AllowAnyOrigin()   
+              .AllowAnyMethod()   
+              .AllowAnyHeader();  
+    });
+});
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,6 +60,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowAnyOrigin");
 
 app.UseHttpsRedirection();
 

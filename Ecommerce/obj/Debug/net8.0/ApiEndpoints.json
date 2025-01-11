@@ -16,6 +16,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Ecommerce.Controllers.OrderController",
+    "Method": "CancelOrder",
+    "RelativePath": "api/cancel-order/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ecommerce.Controllers.OrderController",
+    "Method": "GetCompletedOrders",
+    "RelativePath": "api/completed-orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Ecommerce.Controllers.CustomerController",
     "Method": "AddCustomer",
     "RelativePath": "api/Customer",
@@ -168,6 +194,37 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ecommerce.Controllers.OrderController",
+    "Method": "EditOrderStatus",
+    "RelativePath": "api/Order/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "editOrderDto",
+        "Type": "Ecommerce.Models.Dto.EditOrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ecommerce.Controllers.OrderController",
+    "Method": "GetPendingOrders",
+    "RelativePath": "api/pending-orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
