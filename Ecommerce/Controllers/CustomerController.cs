@@ -103,6 +103,7 @@ public class CustomerController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult> AddCustomer(CustomerDto customerDto)
     {
