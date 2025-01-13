@@ -1,0 +1,13 @@
+@model Movie
+
+@{
+    ViewData["Title"] = Model.Name + " Delete";
+}
+
+<p>Are you sure you want to delete @Model.Name ?</p>
+
+<form asp-action="Delete">
+    <input asp-for="@Model.Id" hidden value="@Model.Id">
+    <button type="submit" class="btn btn-danger">Yes</button>
+</form>
+<a href="@Url.Action("Index")" class="btn btn-primary">Back to List</a>

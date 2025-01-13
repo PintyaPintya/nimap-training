@@ -1,0 +1,17 @@
+@model Customer
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+@if (Model.MembershipType != null)
+{
+    <h2>@Model.MembershipType.Name</h2>
+}
+
+@if (Model.BirthDate != null)
+{
+    <h2>@Model.BirthDate</h2>
+}
