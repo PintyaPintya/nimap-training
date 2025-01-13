@@ -10,18 +10,17 @@
 </head>
 
 <body>
-    <ul id="demo"></ul>
+    <input type="number" id="prod" />
     <button id="btn">Click</button>
+    <ul id="demo"></ul>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('#btn').click(function () {
-                $.get('http://localhost:5245/api/products', function (response) {
-                    response.forEach(e => {
-                        let para = $('<li></li>')
-                        para.text(e.name)
-                        $('#demo').append(para);
-                    });
+                $('#demo').load('http://localhost:5245/api/product/' + $('#prod').val(), function (response) {
+
+                    
+
                 })
             })
         })
