@@ -5,22 +5,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
+    
 </head>
 
 <body>
-    <input type="number" id="prod" />
     <button id="btn">Click</button>
-    <ul id="demo"></ul>
+    <table id="demo">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+    </table>
 
     <script type="text/javascript">
         $(document).ready(function () {
             $('#btn').click(function () {
-                $('#demo').load('http://localhost:5245/api/product/' + $('#prod').val(), function (response) {
+                $.get('http://localhost:5245/api/products', function (response) {
+                    let table = $('<tbody></tbody>')
+                    response.forEach(e => {
+                        let data = $('<tr></tr>')
+                        let name = $('<td></td>')
+                        name.text(e.name)
+                        data.append(name)
 
-                    
+                        let price = $('<td></td>')
+                        price.text(e.price)
+                        data.append(price)
 
+                        let description = $('<td></td>')
+                        description.text(e.description)
+                        data.append(description)
+
+                        table.append(data);
+                    });
+
+                    $('#demo').append(table)
+                    let mainTable = new DataTable('#demo');
                 })
             })
         })
