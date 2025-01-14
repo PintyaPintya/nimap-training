@@ -522,36 +522,31 @@ Problem with question
 Input: str = ["eat","tea","tan","ate","nat","bat"]
  Output: [["bat"],["nat","tan"],["ate","eat","tea"
 
-using System;
-using System.Collections.Generic;
+public class Solution {
+    public IList<IList<string>> GroupAnagrams(string[] arr) {
+        Dictionary<string, List<string>> mpp = new Dictionary<string, List<string>>();
 
-public class HelloWorld
-{
-    public static void Main(string[] args)
-    {
-        List <string> arr = new List <string> {"eat","tea","tan","ate","nat","bat"};
-        
-        List <string> ls = new();
-        
-        foreach(var s in arr)
-        {
-            ls.Add(SortAsc(s));
+        foreach (string s in arr) {
+            char[] chars = s.ToArray();
+            Array.Sort(chars);
+            string temp = new string(chars);
+
+            if (mpp.ContainsKey(temp)) {
+                mpp[temp].Add(s);
+            } else {
+                mpp.Add(temp, new List<string> { s });
+            }
         }
-        
-        foreach(var s in ls)
-        {
-            Console.WriteLine(s);
+
+        IList<IList<string>> ls = new List<IList<string>>();
+
+        foreach (var pair in mpp) {
+            ls.Add(pair.Value);
         }
-    }
-    
-    static string SortAsc(string s)
-    {
-        char[] arr = s.ToCharArray();
-        Array.Sort(arr);
-        return string.Join("",arr);
+
+        return ls;
     }
 }
-
 
 
 

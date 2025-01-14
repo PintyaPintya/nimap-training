@@ -51,6 +51,7 @@ public class MoviesController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> AddUpdate(Movie movie)
     {
         try
@@ -102,8 +103,8 @@ public class MoviesController : Controller
         }
     }
 
-    [HttpPost]
     [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {
         try

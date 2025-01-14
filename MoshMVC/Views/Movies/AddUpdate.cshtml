@@ -34,5 +34,7 @@
         <span asp-validation-for="Stock" class="text-danger"></span>
     </div>
 
+    @Html.AntiForgeryToken()
+
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

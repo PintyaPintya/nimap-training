@@ -9,5 +9,7 @@
 <form asp-action="Delete">
     <input asp-for="@Model.Id" hidden value="@Model.Id">
     <button type="submit" class="btn btn-danger">Yes</button>
+
+    @Html.AntiForgeryToken()
 </form>
 <a href="@Url.Action("Index")" class="btn btn-primary">Back to List</a>

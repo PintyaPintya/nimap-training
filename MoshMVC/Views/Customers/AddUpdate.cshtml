@@ -1,10 +1,12 @@
 @model Customer
 
 @{
-    if(Model == null)
+    if (Model == null)
     {
         ViewData["Title"] = "Add Customer";
-    }else{
+    }
+    else
+    {
         ViewData["Title"] = "Edit Customer";
     }
 }
@@ -18,15 +20,11 @@
     <div class="form-group">
         <label asp-for="BirthDate" class="control-label"></label>
         <input asp-for="BirthDate" type="date" class="form-control">
+        <span asp-validation-for="BirthDate" class="text-danger"></span>
     </div>
     <div class="form-group">
         <label asp-for="MembershipTypeId" class="control-label"></label>
-        <select asp-for="MembershipTypeId">
-            <option value="1" selected>Pay as you go</option>
-            <option value="2">Monthly</option>
-            <option value="3">Quarterly</option>
-            <option value="4">Yearly</option>
-        </select>
+        <select asp-for="MembershipTypeId" asp-items="@(new SelectList(ViewBag.MembershipTypes, "Id", "Name"))" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="isSubscribedToNewsLetter" class="control-label">
@@ -34,6 +32,8 @@
             Subscribed to NewsLetter?
         </label>
     </div>
+
+    @Html.AntiForgeryToken()
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

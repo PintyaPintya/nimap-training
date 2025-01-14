@@ -53,6 +53,9 @@ public class CustomersController : Controller
     {
         try
         {
+            var membershipTypes = await _context.MembershipTypes.ToListAsync();
+            ViewBag.MembershipTypes = membershipTypes;
+
             if (id == 0)
             {
                 return View();
@@ -73,33 +76,43 @@ public class CustomersController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> AddUpdate(Customer customer)
     {
         try
         {
-            if (customer.Id == 0)
+            var membershipTypes = await _context.MembershipTypes.ToListAsync();
+            ViewBag.MembershipTypes = membershipTypes;
+            if (ModelState.IsValid)
             {
-                var customerExists = await _context.Customers.AnyAsync(c => c.Name.ToLower() == customer.Name.ToLower());
-                if (!customerExists)
+                if (customer.Id == 0)
                 {
-                    await _context.Customers.AddAsync(customer);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index");
+                    var customerExists = await _context.Customers.AnyAsync(c => c.Name.ToLower() == customer.Name.ToLower());
+                    if (!customerExists)
+                    {
+                        await _context.Customers.AddAsync(customer);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Name", "Customer name already exists");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("Name", "Customer name already exists");
+                    _context.Customers.Update(customer);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
                 }
+
+                return View(customer);
             }
             else
             {
-                _context.Customers.Update(customer);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index");
+                return View(customer);
             }
-
-            return View(customer);
         }
         catch (Exception ex)
         {
@@ -125,6 +138,7 @@ public class CustomersController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     [HttpPost, ActionName("Delete")]
     public async Task<ActionResult> DeleteConfirmed(int id)
     {

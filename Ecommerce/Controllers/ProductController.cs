@@ -79,6 +79,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<ProductDto>> GetProductById(int id)
     {
         try
