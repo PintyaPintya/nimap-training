@@ -121,26 +121,8 @@ public class CustomersController : Controller
         }
     }
 
+    [HttpDelete]
     public async Task<ActionResult> Delete(int id)
-    {
-        try
-        {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == id);
-            if (customer == null) return NotFound();
-
-            return View(customer);
-        }
-        catch (Exception ex)
-        {
-            ViewBag.Error = ex.Message;
-            return View("Error");
-        }
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [HttpPost, ActionName("Delete")]
-    public async Task<ActionResult> DeleteConfirmed(int id)
     {
         try
         {

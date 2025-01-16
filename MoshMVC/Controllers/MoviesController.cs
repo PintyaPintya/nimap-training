@@ -87,25 +87,8 @@ public class MoviesController : Controller
         }
     }
 
+    [HttpDelete]
     public async Task<ActionResult> Delete(int id)
-    {
-        try
-        {
-            var movie = await _context.Movies.FirstOrDefaultAsync(c => c.Id == id);
-            if (movie == null) return NotFound();
-
-            return View(movie);
-        }
-        catch (Exception ex)
-        {
-            ViewBag.Error = ex.Message;
-            return View("Error");
-        }
-    }
-
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<ActionResult> DeleteConfirmed(int id)
     {
         try
         {
