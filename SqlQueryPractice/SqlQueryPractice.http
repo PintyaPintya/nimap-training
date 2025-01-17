@@ -1,0 +1,6 @@
+@SqlQueryPractice_HostAddress = http://localhost:5283
+
+GET {{SqlQueryPractice_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
