@@ -114,10 +114,58 @@ namespace SqlQueryPractice.Controllers
                 });*/
 
 
+            //Get student details whose namefirst is having 4 characters only
+            //select* from student where len(nameFirst) = 4
+            /* var results = _context.Students
+                .Where(s => s.Namefirst.Length == 4)
+                .Select(s => new
+                {
+                    s.Namefirst,
+                    s.Namelast
+                });*/
+
+
+
+            //Get the ASCII value of the 3rd character of namefirst column.
+            //select nameFirst, ASCII(SUBSTRing(nameFirst, 3,1)) from student
+            /*var results = _context.Students
+                .Select(s => new
+                {
+                    s.Namefirst,
+                    ASCII = (int)s.Namefirst[2]
+                }); */
+
+
+
+            //Get all student whose DOB is in the month of ‘October’
+            //select * from student where month(DOB) = 10 
+            //var results = _context.Students
+            //    .Where(s => s.Dob.Value.Month == 10);
+
+
+
+            //Count total number of students.
+            //select count(*) from student
+            //var results = _context.Students.Count();
+
+
+
+            //Count total number of students who are born in 1986
+            //select * from student where YEAR(DOB) = 1986
+            //var results = _context.Students
+            //    .Where(s => s.Dob.Value.Year == 1986);
+
+
 
 
 
             return Ok(results);
+
+            //return Ok();
         }
+
+
+
+
     }
 }
