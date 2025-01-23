@@ -65,8 +65,8 @@ public class ApplicationDbContext : DbContext
         );
 
         modelBuilder.Entity<Customer>().HasData(
-            new Customer { Id = 1, Name = "Qwer Tyui", BirthDate = new DateOnly(2025,01,12), isSubscribedToNewsLetter = false, MembershipTypeId = 1 },
-            new Customer { Id = 2, Name = "Asdf  Ghjk", isSubscribedToNewsLetter = true, MembershipTypeId = 2 }
+            new Customer { Id = 1, Name = "Qwer Tyui", EmailAddress = "qwer@mvc.com", Password = "password",  BirthDate = new DateOnly(2025,01,12), isSubscribedToNewsLetter = false, MembershipTypeId = 1 },
+            new Customer { Id = 2, Name = "Asdf  Ghjk", EmailAddress = "asdf@mvc.com", Password = "password", isSubscribedToNewsLetter = true, MembershipTypeId = 2 }
         );
 
         modelBuilder.Entity<MembershipType>().HasData(
