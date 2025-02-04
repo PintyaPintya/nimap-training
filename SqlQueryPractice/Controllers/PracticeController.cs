@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SqlQueryPractice.Models;
+using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SqlQueryPractice.Controllers
 {
@@ -354,6 +359,176 @@ namespace SqlQueryPractice.Controllers
 
 
 
+            //Display namefirst, namelast, and batch name for all students
+            //select s.namefirst, s.namelast, cb.name from student s join batch_students bs on s.ID = bs.studentID join course_batches cb on bs.batchID = cb.ID
+            //var results = (from s in _context.Students
+            //               join bs in _context.BatchStudents on s.Id equals bs.StudentId
+            //               join cb in _context.CourseBatches on bs.BatchId equals cb.Id
+            //               select new
+            //               {
+            //                   s.Namefirst,
+            //                   s.Namelast,
+            //                   cb.Name
+            //               });
+
+
+
+
+            //Display (namefirst and count the total number of phones a student is having) for all student
+            //select s.namefirst, count(distinct sp.number) as number from student s join student_phone sp on s.ID = sp.studentID group by s.namefirst
+            //var results = (from s in _context.Students
+            //               join sp in _context.StudentPhones on s.Id equals sp.StudentId
+            //               group sp by s.Namefirst into g
+            //               select new
+            //               {
+            //                   NameFirst = g.Key,
+            //                   Number = g.Select(x => x.Number).Distinct().Count(),
+            //               });
+
+
+
+
+            //Get (namefirst, namelast, emailID, phone number, and address) whose faculty name is ‘ketan’
+            //select s.namefirst, s.namelast, s.emailid, sp.number, sa.address from faculty s join faculty_phone sp on s.ID = sp.facultyID join faculty_address sa on s.ID = sa.facultyID where s.namefirst = 'ketan'
+            //var results = (from f in _context.Faculties
+            //               join fp in _context.FacultyPhones on f.Id equals fp.FacultyId
+            //               join fa in _context.FacultyAddresses on f.Id equals fa.FacultyId
+            //               where f.Namefirst == "ketan"
+            //               select new
+            //               {
+            //                   f.Namefirst,
+            //                   f.Namelast,
+            //                   f.EmailId,
+            //                   fp.Number,
+            //                   fa.Address
+            //               });
+
+
+
+
+            //Get all student details who have taken admission in ‘PG-DAC’ course
+            //select s.namefirst, s.namelast, c.name from student s join batch_students b on s.ID = b.studentID join course_batches cb on b.batchID = cb.ID join course c on cb.courseID = c.ID where c.name = 'PG-DAC'
+            //var results = (from s in _context.Students
+            //               join bs in _context.BatchStudents on s.Id equals bs.StudentId
+            //               join cb in _context.CourseBatches on bs.BatchId equals cb.Id
+            //               join c in _context.Courses on cb.CourseId equals c.Id
+            //               where c.Name == "PG-DAC"
+            //               select new
+            //               {
+            //                   s.Namefirst,
+            //                   s.Namelast,
+            //                   c.Name
+            //               });
+
+
+
+
+
+            //Get all course details which had started on ‘2016-02-01
+            //select c.* from course c join course_batches cb on c.ID = cb.courseID where cb.starton = '2016-02-01'
+            //var results = (from c in _context.Courses
+            //               join cb in _context.CourseBatches on c.Id equals cb.CourseId
+            //               where cb.Starton == new DateOnly(2016, 2, 1)
+            //               select c);
+
+
+
+
+            //Get all course name and module names which are taught in ‘PG-DAC’ course
+            //select c.name, m.name from course c join course_modules cm on c.ID = cm.courseID join modules m on cm.moduleID = m.ID where c.name = 'PG-DAC'
+            //var results = (from c in _context.Courses
+            //               join cm in _context.CourseModules on c.Id equals cm.CourseId
+            //               join m in _context.Modules on cm.ModuleId equals m.Id
+            //               where c.Name == "PG-DAC"
+            //               select new
+            //               {
+            //                   c.Name,
+            //                   Module = m.Name ?? "Unknown"
+            //               });
+
+
+
+
+            //Display how many modules are taught in each course.
+            //select c.name, count(*) from course c join course_modules cm on c.ID = cm.courseID join modules m on cm.moduleID = m.ID group by c.name
+            //var results = (from c in _context.Courses
+            //               join cm in _context.CourseModules on c.Id equals cm.CourseId
+            //               join m in _context.Modules on cm.ModuleId equals m.Id
+            //               group m by c.Name into g
+            //               select new
+            //               {
+            //                   g.Key,
+            //                   Count = g.Select(x => x.Name).Count()
+            //               });
+
+
+
+
+
+            //Display studentID who have more than 2 phone numbers
+            //select s.namefirst from student s join student_phone sp on s.ID = sp.studentID group by s.namefirst having count(*) > 2
+            //var results = (from s in _context.Students
+            //               join sp in _context.StudentPhones on s.Id equals sp.StudentId
+            //               group sp by s.Namefirst into g
+            //               where g.Count() > 2
+            //               select new
+            //               {
+            //                   Name = g.Key
+            //               });
+
+
+
+
+            //Display the courses where ‘JAVA1’ is taught
+            //select c.name from course c join course_modules cm on c.ID = cm.courseID join modules m on cm.moduleID = m.ID where m.name = 'JAVA1'
+            //var results = (from c in _context.Courses
+            //               join cm in _context.CourseModules on c.Id equals cm.CourseId
+            //               join m in _context.Modules on cm.ModuleId equals m.Id
+            //               where m.Name == "JAVA1"
+            //               select c.Name);
+
+
+
+
+
+            //Display all student who have taken admission in 6 months course
+            //select s.namefirst from student s join batch_students bs on s.ID = bs.studentID join course_batches cb on bs.batchID = cb.ID where DATEDIFF(MONTH, cb.starton, cb.endson) = 6
+            //var results = (from s in _context.Students
+            //               join bs in _context.BatchStudents on s.Id equals bs.StudentId
+            //               join cb in _context.CourseBatches on bs.BatchId equals cb.Id
+            //               where EF.Functions.DateDiffMonth(cb.Starton, cb.Endson) == 6
+            //               select s.Namefirst);
+
+
+
+
+
+            //Write a query to display the output in the following manner. 'saleel', 'Aadhaar, Driving Licence, PAN, Voter ID, Passport, Debit, Credit' Arrange the data is ascending order of nameFirst.
+            //select CONCAT(s.namefirst, ', ', STRING_AGG(sc.name, ' ,')) from student s join student_Cards sc on s.ID = sc.studentID group by s.namefirst order by s.namefirst
+            //var results = (from s in _context.Students
+            //               join sc in _context.StudentCards on s.Id equals sc.StudentId
+            //               group sc by s.Namefirst into g
+            //               orderby g.Key
+            //               select new
+            //               {
+            //                   Name = g.Key + ", " + string.Join(", ", g.Select(sc => sc.Name))
+            //               });
+
+
+
+
+
+            //Write a query to display the output in the following manner. 'ruhan', 'DBDA, PG-DAC, Pre-DAC'
+            //select CONCAT(s.namefirst, ', ', STRING_AGG(c.name, ', ')) from student s join batch_students bs on s.ID = bs.studentID join course_batches cb on bs.batchID = cb.Id join course c on cb.courseID = c.ID group by s.namefirst
+            var results = (from s in _context.Students
+                           join bs in _context.BatchStudents on s.Id equals bs.StudentId
+                           join cb in _context.CourseBatches on bs.BatchId equals cb.Id
+                           join c in _context.Courses on cb.CourseId equals c.Id
+                           group c by s.Namefirst into g
+                           select new
+                           {
+                               Name = g.Key + ", " + string.Join(", ", g.Select(c => c.Name))
+                           });
 
 
             return Ok(results);
