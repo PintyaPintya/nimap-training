@@ -533,5 +533,36 @@ namespace SqlQueryPractice.Controllers
 
             return Ok(results);
         }
+
+        [HttpGet("SubQueries")]
+        public ActionResult SubQueries()
+        {
+            //Display all student who have taken admission in more than 2 batches.
+            //SELECT s.namefirst FROM student s JOIN batch_students bs ON s.ID = bs.studentID GROUP BY s.namefirst HAVING COUNT(*) > 2;
+            //select nameFirst from student where id in (select studentId from batch_students group by studentID having COUNT(*) > 2)
+            //var results = _context.BatchStudents
+            //          .GroupBy(bs => bs.StudentId)
+            //          .Where(g => g.Count() > 2)
+            //          .Select(g => g.FirstOrDefault().Student.Namefirst);
+
+
+
+
+            //Display the student detail who have joined the same batch of the student ‘saleel’.
+            //select s.namefirst, s.namelast from student s join batch_students bs on s.Id = bs.studentID where bs.batchID in (select bs.batchID from student s join batch_students bs on s.ID = bs.studentID where s.namefirst = 'saleel')
+            var results = (from s in _context.Students
+                           join bs in _context.BatchStudents on s.Id equals bs.StudentId
+                           where _context.BatchStudents
+                                .Where(b => b.Student.Namefirst == "Saleel")
+                                .Select(b => b.BatchId)
+                                .Contains(bs.BatchId)
+                           select new
+                           {
+                               s.Namefirst,
+                               s.Namelast
+                           });
+
+            return Ok(results);
+        }
     }
 }
