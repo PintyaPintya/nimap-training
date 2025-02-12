@@ -550,12 +550,63 @@ namespace SqlQueryPractice.Controllers
 
             //Display the student detail who have joined the same batch of the student ‘saleel’.
             //select s.namefirst, s.namelast from student s join batch_students bs on s.Id = bs.studentID where bs.batchID in (select bs.batchID from student s join batch_students bs on s.ID = bs.studentID where s.namefirst = 'saleel')
+            //var results = (from s in _context.Students
+            //               join bs in _context.BatchStudents on s.Id equals bs.StudentId
+            //               where _context.BatchStudents
+            //                    .Where(b => b.Student.Namefirst == "Saleel")
+            //                    .Select(b => b.BatchId)
+            //                    .Contains(bs.BatchId)
+            //               select new
+            //               {
+            //                   s.Namefirst,
+            //                   s.Namelast
+            //               });
+
+
+
+
+            //Display all courses where least number of students have taken the admission.
+            /*select c.name, count(*) as 'no of students'
+            from course c
+            join course_batches cb on c.ID = cb.courseID
+            join batch_students bs on cb.Id = bs.batchID
+            group by c.name
+            HAVING COUNT(*) = (
+                SELECT MIN(student_count)
+                FROM(
+                    SELECT COUNT(*) AS student_count
+                    FROM course c
+                    JOIN course_batches cb ON c.ID = cb.courseID
+                    JOIN batch_students bs ON cb.Id = bs.batchID
+                    GROUP BY c.name
+                ) AS min_counts
+            );*/
+            //var minCount = (from c in _context.Courses
+            //                join cb in _context.CourseBatches on c.Id equals cb.CourseId
+            //                join bs in _context.BatchStudents on cb.Id equals bs.BatchId
+            //                group bs by c.Name into g
+            //                select g.Count()).Min();
+
+            //var results = (from c in _context.Courses
+            //               join cb in _context.CourseBatches on c.Id equals cb.CourseId
+            //               join bs in _context.BatchStudents on cb.Id equals bs.BatchId
+            //               group bs by c.Name into g
+            //               where g.Count() == minCount
+            //               select new
+            //               {
+            //                   courseName = g.Key,
+            //                   noOfStudents = g.Count()
+            //               });
+
+
+
+
+            //Display student details who have not taken the admission.
+            //select s.namefirst, s.namelast, bs.batchID from student s left join batch_students bs on s.ID = bs.studentID  where bs.batchID is null
             var results = (from s in _context.Students
-                           join bs in _context.BatchStudents on s.Id equals bs.StudentId
-                           where _context.BatchStudents
-                                .Where(b => b.Student.Namefirst == "Saleel")
-                                .Select(b => b.BatchId)
-                                .Contains(bs.BatchId)
+                           join bs in _context.BatchStudents on s.Id equals bs.StudentId into batchStudents
+                           from bs in batchStudents.DefaultIfEmpty()
+                           where bs.BatchId == null
                            select new
                            {
                                s.Namefirst,
